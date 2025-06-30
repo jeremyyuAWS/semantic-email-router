@@ -7,11 +7,26 @@ import DeveloperGuide from "./components/DeveloperGuide";
 import InfoModal from "./components/InfoModal";
 import GuidedTour from "./components/GuidedTour";
 import IntegrationPanel from "./components/IntegrationPanel";
+import WorkflowProgress from "./components/WorkflowProgress";
+import BulkProcessingPanel from "./components/BulkProcessingPanel";
+import LearningProgressPanel from "./components/LearningProgressPanel";
+import { useWorkflowState } from "./hooks/useWorkflowState";
 
 function App() {
   const [activeTab, setActiveTab] = useState("analyzer");
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showGuidedTour, setShowGuidedTour] = useState(false);
+  const [isBulkProcessing, setIsBulkProcessing] = useState(false);
+
+  const {
+    workflowState,
+    crossTabData,
+    addProcessedEmail,
+    updateLearningMetrics,
+    setBulkMode,
+    setCurrentStep,
+    generateBulkProcessingResults
+  } = useWorkflowState();
 
   const tabs = [
     {
@@ -64,10 +79,10 @@ function App() {
           "Document-grounded responses with source attribution",
           "Confidence scoring and processing time metrics",
           "Email attachment detection and analysis",
-          "Bulk processing and demo scenarios",
-          "Export capabilities for CRM integration"
+          "Bulk processing with learning progression",
+          "Real-time feedback integration and improvement"
         ];
-        tabInfo.businessValue = "Automate front-door email routing with 95%+ accuracy across multiple industries, reducing manual triage time from hours to seconds while ensuring all customer inquiries reach the right department with proper context and urgency classification.";
+        tabInfo.businessValue = "Automate front-door email routing with 95%+ accuracy across multiple industries, reducing manual triage time from hours to seconds while continuously learning from feedback to improve accuracy over time.";
         break;
       
       case "knowledge":
@@ -76,7 +91,7 @@ function App() {
           "Intelligent content parsing and chunking",
           "Semantic search with confidence scoring",
           "Real-time processing status and metrics",
-          "Preview parsed data tables and sections",
+          "Cross-tab retrieval integration",
           "Vector embedding and retrieval testing",
           "Industry-specific knowledge base templates",
           "Document versioning and update tracking"
@@ -130,6 +145,40 @@ function App() {
     return tabInfo;
   };
 
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    // Update workflow step based on tab
+    switch (tab) {
+      case "analyzer":
+        setCurrentStep("analysis");
+        break;
+      case "knowledge":
+        setCurrentStep("knowledge");
+        break;
+      case "admin":
+      case "integration-testing":
+        setCurrentStep("routing");
+        break;
+      case "developer":
+        setCurrentStep("complete");
+        break;
+    }
+  };
+
+  const handleStartBulkProcessing = () => {
+    setIsBulkProcessing(true);
+    setBulkMode(true);
+    // Simulate bulk processing completion after 8 seconds
+    setTimeout(() => {
+      setIsBulkProcessing(false);
+    }, 8000);
+  };
+
+  const handleEmailSelect = (email: any) => {
+    setActiveTab("analyzer");
+    setCurrentStep("analysis");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
@@ -176,7 +225,7 @@ function App() {
                 <button
                   key={tab.id}
                   id={tab.id === "admin" ? "integration-tab" : undefined}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => handleTabChange(tab.id)}
                   className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                     isActive
                       ? "border-blue-500 text-blue-600"
@@ -185,6 +234,9 @@ function App() {
                 >
                   <Icon className="w-5 h-5" />
                   <span>{tab.name}</span>
+                  {workflowState.emails.length > 0 && tab.id === "analyzer" && (
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                  )}
                 </button>
               );
             })}
@@ -195,6 +247,13 @@ function App() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-6">
+          {/* Workflow Progress Bar */}
+          <WorkflowProgress 
+            currentStep={workflowState.currentStep}
+            emailsProcessed={workflowState.emails.length}
+            onStepClick={setCurrentStep}
+          />
+
           {/* Tab Description */}
           <div className="bg-white rounded-xl border border-slate-200 p-6" id="welcome">
             <h2 className="text-lg font-semibold text-slate-900 mb-2">
@@ -224,11 +283,53 @@ function App() {
             </div>
           </div>
 
+          {/* Cross-Tab Learning Progress Panel */}
+          {workflowState.emails.length > 0 && (
+            <LearningProgressPanel
+              learningMetrics={workflowState.learningMetrics}
+              recentUpdates={crossTabData.learningUpdates}
+              onResetLearning={() => {
+                // Reset learning state
+                setBulkMode(false);
+                setCurrentStep('analysis');
+              }}
+            />
+          )}
+
+          {/* Bulk Processing Panel (shown on analyzer tab when in bulk mode) */}
+          {activeTab === "analyzer" && workflowState.bulkMode && (
+            <BulkProcessingPanel
+              isProcessing={isBulkProcessing}
+              onStartBulkProcessing={handleStartBulkProcessing}
+              onPauseBulkProcessing={() => setIsBulkProcessing(false)}
+              bulkResults={generateBulkProcessingResults()}
+              processedEmails={workflowState.emails}
+              onEmailSelect={handleEmailSelect}
+            />
+          )}
+
           {/* Tab Content */}
-          {activeTab === "analyzer" && <EmailAnalyzer />}
-          {activeTab === "knowledge" && <KnowledgeBase />}
+          {activeTab === "analyzer" && (
+            <EmailAnalyzer 
+              workflowState={workflowState}
+              onEmailProcessed={addProcessedEmail}
+              onLearningUpdate={updateLearningMetrics}
+              onBulkModeChange={setBulkMode}
+            />
+          )}
+          {activeTab === "knowledge" && (
+            <KnowledgeBase 
+              crossTabQueries={crossTabData.knowledgeBaseQueries}
+              lastAnalyzedEmail={crossTabData.lastAnalyzedEmail}
+            />
+          )}
           {activeTab === "admin" && <AdminIntegrations />}
-          {activeTab === "integration-testing" && <IntegrationPanel />}
+          {activeTab === "integration-testing" && (
+            <IntegrationPanel 
+              processedEmails={workflowState.emails}
+              routingResults={crossTabData.routingResults}
+            />
+          )}
           {activeTab === "developer" && <DeveloperGuide />}
         </div>
       </main>
@@ -242,7 +343,7 @@ function App() {
       <GuidedTour
         isOpen={showGuidedTour}
         onClose={() => setShowGuidedTour(false)}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
       />
     </div>
   );

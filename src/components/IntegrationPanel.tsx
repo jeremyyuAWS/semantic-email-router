@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Zap, CheckCircle, AlertCircle, ExternalLink, Webhook, Mail, Share, Activity } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Zap, CheckCircle, AlertCircle, ExternalLink, Webhook, Mail, Share, Activity, Database, Users } from "lucide-react";
+import { ProcessedEmail } from "../types/workflow";
 
 interface WebhookTest {
   id: string;
@@ -10,9 +11,43 @@ interface WebhookTest {
   timestamp?: string;
 }
 
-const IntegrationPanel: React.FC = () => {
+interface IntegrationPanelProps {
+  processedEmails?: ProcessedEmail[];
+  routingResults?: any[];
+}
+
+const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
+  processedEmails = [],
+  routingResults = []
+}) => {
   const [activeTests, setActiveTests] = useState<WebhookTest[]>([]);
   const [isTestingWebhooks, setIsTestingWebhooks] = useState(false);
+  const [integrationMetrics, setIntegrationMetrics] = useState({
+    totalRouted: 0,
+    successRate: 0,
+    avgResponseTime: 0,
+    crmRecordsCreated: 0
+  });
+
+  // Update integration metrics when processed emails change
+  useEffect(() => {
+    if (processedEmails.length > 0) {
+      const totalRouted = processedEmails.length;
+      const successfulRoutes = processedEmails.filter(email => 
+        email.analysis?.structured_output?.crm_ready
+      ).length;
+      const successRate = (successfulRoutes / totalRouted) * 100;
+      const avgResponseTime = processedEmails.reduce((sum, email) => 
+        sum + email.processingTime, 0) / totalRouted;
+
+      setIntegrationMetrics({
+        totalRouted,
+        successRate,
+        avgResponseTime,
+        crmRecordsCreated: successfulRoutes
+      });
+    }
+  }, [processedEmails]);
 
   const simulateWebhookTest = async (endpoint: string, name: string) => {
     const testId = `test_${Date.now()}`;
@@ -81,6 +116,54 @@ const IntegrationPanel: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Cross-Tab Integration Metrics */}
+      {processedEmails.length > 0 && (
+        <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">Integration Performance Metrics</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-center space-x-3">
+                <Users className="w-6 h-6 text-blue-600" />
+                <div>
+                  <div className="text-2xl font-bold text-blue-900">{integrationMetrics.totalRouted}</div>
+                  <div className="text-sm text-blue-700">Emails Routed</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+              <div className="flex items-center space-x-3">
+                <CheckCircle className="w-6 h-6 text-emerald-600" />
+                <div>
+                  <div className="text-2xl font-bold text-emerald-900">{integrationMetrics.successRate.toFixed(1)}%</div>
+                  <div className="text-sm text-emerald-700">Success Rate</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+              <div className="flex items-center space-x-3">
+                <Activity className="w-6 h-6 text-purple-600" />
+                <div>
+                  <div className="text-2xl font-bold text-purple-900">{(integrationMetrics.avgResponseTime / 1000).toFixed(1)}s</div>
+                  <div className="text-sm text-purple-700">Avg Response Time</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="flex items-center space-x-3">
+                <Database className="w-6 h-6 text-orange-600" />
+                <div>
+                  <div className="text-2xl font-bold text-orange-900">{integrationMetrics.crmRecordsCreated}</div>
+                  <div className="text-sm text-orange-700">CRM Records Created</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Live Integration Testing */}
       <div className="bg-white rounded-xl border border-slate-200 p-6">
         <div className="flex items-center space-x-2 mb-6">
@@ -192,6 +275,44 @@ const IntegrationPanel: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Processed Emails Integration Status */}
+      {processedEmails.length > 0 && (
+        <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">Email Integration Status</h3>
+          <div className="space-y-3">
+            {processedEmails.slice(-5).map((email) => (
+              <div key={email.id} className="border border-slate-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="font-medium text-slate-900">{email.company}</div>
+                  <div className="flex items-center space-x-2">
+                    {email.analysis?.structured_output?.crm_ready ? (
+                      <CheckCircle className="w-4 h-4 text-emerald-500" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-yellow-500" />
+                    )}
+                    <span className={`text-sm ${
+                      email.analysis?.structured_output?.crm_ready 
+                        ? 'text-emerald-600' 
+                        : 'text-yellow-600'
+                    }`}>
+                      {email.analysis?.structured_output?.crm_ready ? 'Ready for CRM' : 'Processing'}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-sm text-slate-600 mb-2">
+                  Intent: {email.analysis?.intent} • Department: {email.analysis?.routing_tags?.department}
+                </div>
+                {email.analysis?.structured_output?.sharepoint_path && (
+                  <div className="text-xs text-slate-500">
+                    SharePoint: {email.analysis.structured_output.sharepoint_path}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Email Signature Parsing Demo */}
       <div className="bg-white rounded-xl border border-slate-200 p-6">

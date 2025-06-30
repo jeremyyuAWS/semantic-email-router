@@ -1,24 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Send, FileText, Target, Tag, Database, TrendingUp, Copy, Check, ExternalLink, Settings, Download, Clock, Users, Zap, Paperclip, Play, MessageCircle, Bot, User, ThumbsUp, Edit3 } from "lucide-react";
 import sampleEmails from "../../data/sample_emails.json";
+import { WorkflowState, ProcessedEmail, AnalysisResult, FeedbackUpdate } from "../types/workflow";
 
-interface AnalysisResult {
-  intent: string;
-  entities: Record<string, any>;
-  routing_tags: Record<string, any>;
-  knowledge_base_match?: {
-    source: string;
-    row?: number;
-    page?: number;
-    content: string;
-  };
-  confidence: number;
-  structured_output?: {
-    crm_ready: boolean;
-    sharepoint_path: string;
-    next_actions: string[];
-  };
-  processing_time?: number;
+interface EmailAnalyzerProps {
+  workflowState: WorkflowState;
+  onEmailProcessed: (email: ProcessedEmail) => void;
+  onLearningUpdate: (update: FeedbackUpdate) => void;
+  onBulkModeChange: (enabled: boolean, scenarioId?: string) => void;
 }
 
 interface ProcessingStep {
@@ -35,15 +24,12 @@ interface ChatMessage {
   metadata?: any;
 }
 
-interface AnalysisUpdate {
-  field: string;
-  oldValue: any;
-  newValue: any;
-  timestamp: string;
-  confidence_improvement: number;
-}
-
-const EmailAnalyzer: React.FC = () => {
+const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
+  workflowState,
+  onEmailProcessed,
+  onLearningUpdate,
+  onBulkModeChange
+}) => {
   const [emailContent, setEmailContent] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
@@ -51,8 +37,6 @@ const EmailAnalyzer: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [processingSteps, setProcessingSteps] = useState<ProcessingStep[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
-  const [bulkMode, setBulkMode] = useState(false);
-  const [bulkEmails, setBulkEmails] = useState<string[]>([]);
   const [selectedAttachments, setSelectedAttachments] = useState<any[]>([]);
 
   // Feedback System State
@@ -61,20 +45,8 @@ const EmailAnalyzer: React.FC = () => {
   const [newMessage, setNewMessage] = useState("");
   const [isAgentTyping, setIsAgentTyping] = useState(false);
   const [isAutoTyping, setIsAutoTyping] = useState(false);
-  const [analysisUpdates, setAnalysisUpdates] = useState<AnalysisUpdate[]>([]);
+  const [analysisUpdates, setAnalysisUpdates] = useState<FeedbackUpdate[]>([]);
   const [highlightedFields, setHighlightedFields] = useState<Set<string>>(new Set());
-  const [jargonDictionary, setJargonDictionary] = useState<Record<string, string>>({
-    "ss": "stainless steel",
-    "304": "304 grade stainless steel",
-    "316": "316 grade stainless steel", 
-    "sch 40": "schedule 40",
-    "sch 80": "schedule 80",
-    "od": "outside diameter",
-    "asap": "as soon as possible",
-    "rush": "urgent priority",
-    "demo": "demolition",
-    "hvac": "heating ventilation air conditioning"
-  });
 
   const initializeProcessingSteps = () => {
     return [
@@ -135,8 +107,11 @@ const EmailAnalyzer: React.FC = () => {
       emailContent.includes(email.content.substring(0, 50))
     );
 
+    const totalProcessingTime = currentSteps.reduce((total, step) => total + step.time, 0);
+
+    let result: AnalysisResult;
     if (matchingEmail) {
-      setAnalysisResult({
+      result = {
         intent: matchingEmail.expected_analysis.intent,
         entities: matchingEmail.expected_analysis.entities,
         routing_tags: matchingEmail.expected_analysis.routing_tags,
@@ -157,7 +132,9 @@ const EmailAnalyzer: React.FC = () => {
             ? "Siemens Magnetom Vida MRI-SIE-VIDA: E-2847 gradient coil temperature warning, 2-hour critical response"
             : matchingEmail.industry === "Legal"
             ? "Complex contract analysis: $850/hour Senior Partner, 40-60 hours typical for multi-party agreements"
-            : "PIP-304-1.5OD-SCH40: 304 SS Pipe 1.5\" OD Schedule 40 - $28.50/ft, In Stock, 2-3 day lead time"
+            : "PIP-304-1.5OD-SCH40: 304 SS Pipe 1.5\" OD Schedule 40 - $28.50/ft, In Stock, 2-3 day lead time",
+          confidence: matchingEmail.expected_analysis.confidence,
+          retrievalTime: 200 + Math.random() * 300
         },
         confidence: matchingEmail.expected_analysis.confidence,
         structured_output: {
@@ -177,15 +154,30 @@ const EmailAnalyzer: React.FC = () => {
             ? ["Assign senior partner", "Schedule client meeting", "Begin document review"]
             : ["Generate product quote", "Check inventory levels", "Verify specifications"]
         },
-        processing_time: currentSteps.reduce((total, step) => total + step.time, 0)
-      });
+        processing_time: totalProcessingTime
+      };
 
       if (matchingEmail.attachments) {
         setSelectedAttachments(matchingEmail.attachments);
       }
+
+      // Create processed email object
+      const processedEmail: ProcessedEmail = {
+        id: `email_${Date.now()}`,
+        content: emailContent,
+        company: matchingEmail.company,
+        industry: matchingEmail.industry,
+        subject: matchingEmail.subject,
+        attachments: matchingEmail.attachments,
+        analysis: result,
+        processingTime: totalProcessingTime,
+        confidenceProgression: [result.confidence]
+      };
+
+      onEmailProcessed(processedEmail);
     } else {
       // Generic analysis for custom content
-      setAnalysisResult({
+      result = {
         intent: "General Inquiry",
         entities: {
           extracted_topics: ["Customer communication", "Business inquiry"],
@@ -204,11 +196,44 @@ const EmailAnalyzer: React.FC = () => {
           sharepoint_path: "/Sites/CustomerService/GeneralInquiries/2025",
           next_actions: ["Review inquiry", "Assign to specialist", "Follow up within 24h"]
         },
-        processing_time: currentSteps.reduce((total, step) => total + step.time, 0)
-      });
+        processing_time: totalProcessingTime
+      };
+
+      const processedEmail: ProcessedEmail = {
+        id: `email_${Date.now()}`,
+        content: emailContent,
+        company: "Unknown Company",
+        industry: "General",
+        subject: "Custom Email Analysis",
+        analysis: result,
+        processingTime: totalProcessingTime,
+        confidenceProgression: [result.confidence]
+      };
+
+      onEmailProcessed(processedEmail);
     }
 
+    setAnalysisResult(result);
     setIsAnalyzing(false);
+  };
+
+  const handleBulkScenarioRun = async (scenarioId: string) => {
+    setSelectedScenario(scenarioId);
+    onBulkModeChange(true, scenarioId);
+
+    const scenario = sampleEmails.demo_scenarios.find(s => s.id === scenarioId);
+    if (!scenario) return;
+
+    // Process each email in the scenario
+    for (const emailId of scenario.emails) {
+      const email = sampleEmails.emails.find(e => e.id === emailId);
+      if (email) {
+        setEmailContent(email.content);
+        setSelectedAttachments(email.attachments || []);
+        await handleAnalyze();
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Delay between emails
+      }
+    }
   };
 
   const startFeedbackChat = () => {
@@ -231,7 +256,6 @@ const EmailAnalyzer: React.FC = () => {
   const simulateAutoTyping = async () => {
     setIsAutoTyping(true);
     
-    // Sample correction messages based on current analysis
     const sampleCorrections = [
       "The system missed the material specification - this should be 316L stainless steel, not regular 304. Also, 'SS' means stainless steel and 'Sch 80' means Schedule 80 wall thickness.",
       "Priority should be High, not Normal - when customers say 'ASAP' or 'urgent' that means high priority. Also missing the quantity - they want 25 pieces, not 50.",
@@ -241,7 +265,6 @@ const EmailAnalyzer: React.FC = () => {
 
     const correctionMessage = sampleCorrections[Math.floor(Math.random() * sampleCorrections.length)];
     
-    // Simulate typing character by character
     let typedMessage = "";
     for (let i = 0; i < correctionMessage.length; i++) {
       typedMessage += correctionMessage[i];
@@ -251,7 +274,6 @@ const EmailAnalyzer: React.FC = () => {
     
     setIsAutoTyping(false);
     
-    // Auto-submit after typing
     setTimeout(() => {
       sendFeedbackMessage(correctionMessage);
       setNewMessage("");
@@ -262,7 +284,6 @@ const EmailAnalyzer: React.FC = () => {
     const messageToSend = messageText || newMessage;
     if (!messageToSend.trim()) return;
 
-    // Add user message
     const userMessage: ChatMessage = {
       id: `user_${Date.now()}`,
       type: "user",
@@ -274,13 +295,10 @@ const EmailAnalyzer: React.FC = () => {
     if (!messageText) setNewMessage("");
     setIsAgentTyping(true);
 
-    // Process the feedback and update analysis
     const updatedAnalysis = await processFeedback(messageToSend);
 
-    // Simulate agent thinking time
     await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 2000));
 
-    // Generate contextual agent response
     let agentResponse = generateAgentResponse(messageToSend, updatedAnalysis);
 
     const agentMessage: ChatMessage = {
@@ -298,38 +316,23 @@ const EmailAnalyzer: React.FC = () => {
     setIsAgentTyping(false);
     setChatMessages(prev => [...prev, agentMessage]);
 
-    // Highlight the updated fields
     if (updatedAnalysis.length > 0) {
       const newHighlights = new Set(highlightedFields);
       updatedAnalysis.forEach(update => newHighlights.add(update.field));
       setHighlightedFields(newHighlights);
 
-      // Remove highlights after 5 seconds
       setTimeout(() => {
         setHighlightedFields(new Set());
       }, 5000);
     }
   };
 
-  const processFeedback = async (feedback: string): Promise<AnalysisUpdate[]> => {
+  const processFeedback = async (feedback: string): Promise<FeedbackUpdate[]> => {
     if (!analysisResult) return [];
 
-    const updates: AnalysisUpdate[] = [];
+    const updates: FeedbackUpdate[] = [];
     const newResult = { ...analysisResult };
     const message = feedback.toLowerCase();
-
-    // Process jargon/shorthand learning
-    const jargonMatches = message.match(/'([^']+)'\s+means?\s+([^.!?]+)/g);
-    if (jargonMatches) {
-      jargonMatches.forEach(match => {
-        const parts = match.match(/'([^']+)'\s+means?\s+([^.!?]+)/);
-        if (parts) {
-          const shorthand = parts[1].toLowerCase();
-          const meaning = parts[2].trim();
-          setJargonDictionary(prev => ({ ...prev, [shorthand]: meaning }));
-        }
-      });
-    }
 
     // Intent corrections
     if (message.includes("intent should be") || message.includes("should be classified as")) {
@@ -339,13 +342,16 @@ const EmailAnalyzer: React.FC = () => {
         const oldIntent = newResult.intent;
         const newIntent = intentMatch[1].trim();
         newResult.intent = newIntent;
-        updates.push({
+        const update: FeedbackUpdate = {
           field: "intent",
           oldValue: oldIntent,
           newValue: newIntent,
           timestamp: new Date().toISOString(),
-          confidence_improvement: 0.1
-        });
+          confidence_improvement: 0.1,
+          emailId: `email_${Date.now()}`
+        };
+        updates.push(update);
+        onLearningUpdate(update);
       }
     }
 
@@ -357,94 +363,20 @@ const EmailAnalyzer: React.FC = () => {
           const oldPriority = newResult.routing_tags.priority;
           const newPriority = priorityMatch[1].trim();
           newResult.routing_tags.priority = newPriority;
-          updates.push({
+          const update: FeedbackUpdate = {
             field: "routing_tags.priority",
             oldValue: oldPriority,
             newValue: newPriority,
             timestamp: new Date().toISOString(),
-            confidence_improvement: 0.08
-          });
-        }
-      }
-      
-      if (message.includes("department should")) {
-        const deptMatch = message.match(/department should (?:be|route to) ['"]?([^'".,!?]+)['"]?/i);
-        if (deptMatch) {
-          const oldDept = newResult.routing_tags.department;
-          const newDept = deptMatch[1].trim();
-          newResult.routing_tags.department = newDept;
-          updates.push({
-            field: "routing_tags.department",
-            oldValue: oldDept,
-            newValue: newDept,
-            timestamp: new Date().toISOString(),
-            confidence_improvement: 0.08
-          });
+            confidence_improvement: 0.08,
+            emailId: `email_${Date.now()}`
+          };
+          updates.push(update);
+          onLearningUpdate(update);
         }
       }
     }
 
-    // Entity corrections
-    if (message.includes("quantity") || message.includes("material") || message.includes("specification")) {
-      if (message.includes("quantity")) {
-        const qtyMatch = message.match(/(?:quantity|want|need)\s+(?:is\s+)?(\d+)/i);
-        if (qtyMatch) {
-          const oldQty = newResult.entities.quantity;
-          const newQty = qtyMatch[1] + " pieces";
-          newResult.entities.quantity = newQty;
-          updates.push({
-            field: "entities.quantity",
-            oldValue: oldQty,
-            newValue: newQty,
-            timestamp: new Date().toISOString(),
-            confidence_improvement: 0.12
-          });
-        }
-      }
-
-      if (message.includes("material") || message.includes("316l") || message.includes("304")) {
-        const materialMatch = message.match(/(316l?|304|carbon steel|stainless steel)/i);
-        if (materialMatch) {
-          const oldMaterial = newResult.entities.product;
-          const newMaterial = materialMatch[1] + " " + (oldMaterial || "material");
-          newResult.entities.product = newMaterial;
-          updates.push({
-            field: "entities.product",
-            oldValue: oldMaterial,
-            newValue: newMaterial,
-            timestamp: new Date().toISOString(),
-            confidence_improvement: 0.15
-          });
-        }
-      }
-    }
-
-    // Missing entity additions
-    if (message.includes("missing") || message.includes("should include")) {
-      if (message.includes("schedule") || message.includes("sch")) {
-        newResult.entities.wall_thickness = "Schedule 80";
-        updates.push({
-          field: "entities.wall_thickness",
-          oldValue: "Not specified",
-          newValue: "Schedule 80",
-          timestamp: new Date().toISOString(),
-          confidence_improvement: 0.1
-        });
-      }
-
-      if (message.includes("diameter") || message.includes("od")) {
-        newResult.entities.diameter = "1.5 inch OD";
-        updates.push({
-          field: "entities.diameter",
-          oldValue: "Not specified", 
-          newValue: "1.5 inch OD",
-          timestamp: new Date().toISOString(),
-          confidence_improvement: 0.1
-        });
-      }
-    }
-
-    // Confidence improvements
     if (updates.length > 0) {
       newResult.confidence = Math.min(newResult.confidence + 0.05 * updates.length, 1.0);
     }
@@ -455,7 +387,7 @@ const EmailAnalyzer: React.FC = () => {
     return updates;
   };
 
-  const generateAgentResponse = (feedback: string, updates: AnalysisUpdate[]): string => {
+  const generateAgentResponse = (feedback: string, updates: FeedbackUpdate[]): string => {
     const message = feedback.toLowerCase();
     
     if (updates.length === 0) {
@@ -469,17 +401,12 @@ const EmailAnalyzer: React.FC = () => {
       response += `✓ Updated ${fieldName}: "${update.oldValue}" → "${update.newValue}"\n`;
     });
 
-    // Add specific responses based on feedback type
     if (message.includes("316l") || message.includes("material")) {
       response += "\nI've learned that material specifications are critical for your orders. I'll pay closer attention to steel grades in future emails.";
     }
     
     if (message.includes("asap") || message.includes("urgent")) {
       response += "\nI've noted that 'ASAP' and 'urgent' indicate high priority. I'll adjust routing accordingly for time-sensitive requests.";
-    }
-
-    if (message.includes("ss") || message.includes("sch")) {
-      response += "\nI've added your industry shorthand to my vocabulary. This will help me better understand technical specifications in future emails.";
     }
 
     response += `\n\nConfidence improved by ${Math.round(updates.reduce((sum, u) => sum + u.confidence_improvement, 0) * 100)}%. The analysis is now more accurate!`;
@@ -499,22 +426,6 @@ const EmailAnalyzer: React.FC = () => {
     }
   };
 
-  const runDemoScenario = (scenarioId: string) => {
-    const scenario = sampleEmails.demo_scenarios.find(s => s.id === scenarioId);
-    if (scenario) {
-      setSelectedScenario(scenarioId);
-      setBulkMode(true);
-      setBulkEmails(scenario.emails);
-      
-      // Load first email of scenario
-      const firstEmail = sampleEmails.emails.find(e => e.id === scenario.emails[0]);
-      if (firstEmail) {
-        setEmailContent(firstEmail.content);
-        setSelectedAttachments(firstEmail.attachments || []);
-      }
-    }
-  };
-
   const exportResults = () => {
     if (!analysisResult) return;
     
@@ -524,7 +435,7 @@ const EmailAnalyzer: React.FC = () => {
       analysis_result: analysisResult,
       attachments: selectedAttachments,
       feedback_history: analysisUpdates,
-      jargon_learned: jargonDictionary
+      learning_metrics: workflowState.learningMetrics
     };
     
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -551,7 +462,7 @@ const EmailAnalyzer: React.FC = () => {
           recommended_actions: analysisResult.structured_output?.next_actions,
           attachments_detected: selectedAttachments.length,
           feedback_iterations: analysisUpdates.length,
-          jargon_dictionary: jargonDictionary
+          learning_metrics: workflowState.learningMetrics
         }
       };
       navigator.clipboard.writeText(JSON.stringify(output, null, 2));
@@ -588,14 +499,14 @@ const EmailAnalyzer: React.FC = () => {
             <h3 className="text-lg font-semibold text-slate-900">Demo Scenarios</h3>
           </div>
           <div className="text-sm text-slate-600">
-            Pre-configured industry workflows
+            Pre-configured industry workflows with bulk processing
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {sampleEmails.demo_scenarios.map((scenario) => (
             <button
               key={scenario.id}
-              onClick={() => runDemoScenario(scenario.id)}
+              onClick={() => handleBulkScenarioRun(scenario.id)}
               className={`text-left p-4 border rounded-lg transition-colors ${
                 selectedScenario === scenario.id
                   ? "border-purple-300 bg-purple-50"
@@ -605,7 +516,7 @@ const EmailAnalyzer: React.FC = () => {
               <div className="font-medium text-slate-900 mb-1">{scenario.name}</div>
               <div className="text-sm text-slate-600 mb-2">{scenario.description}</div>
               <div className="text-xs text-purple-600 font-medium">
-                {scenario.emails.length} emails • {scenario.theme}
+                {scenario.emails.length} emails • Bulk processing demo
               </div>
             </button>
           ))}
@@ -655,9 +566,9 @@ const EmailAnalyzer: React.FC = () => {
         <div className="flex items-center space-x-2 mb-4">
           <FileText className="w-5 h-5 text-blue-600" />
           <h3 className="text-lg font-semibold text-slate-900">Email Content</h3>
-          {bulkMode && (
+          {workflowState.bulkMode && (
             <div className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
-              Bulk Mode: {bulkEmails.length} emails
+              Bulk Mode: Learning progression active
             </div>
           )}
         </div>
@@ -878,6 +789,7 @@ const EmailAnalyzer: React.FC = () => {
                       <div className="text-sm text-purple-700">
                         {analysisResult.knowledge_base_match.row && `Row ${analysisResult.knowledge_base_match.row}`}
                         {analysisResult.knowledge_base_match.page && `Page ${analysisResult.knowledge_base_match.page}`}
+                        <span className="ml-2">({analysisResult.knowledge_base_match.retrievalTime}ms)</span>
                       </div>
                     </div>
                     <div className="text-sm text-purple-800">
@@ -959,7 +871,7 @@ const EmailAnalyzer: React.FC = () => {
                         recommended_actions: analysisResult.structured_output?.next_actions,
                         attachments_detected: selectedAttachments.length,
                         feedback_iterations: analysisUpdates.length,
-                        jargon_dictionary: jargonDictionary
+                        learning_metrics: workflowState.learningMetrics
                       }
                     }, null, 2)}
                   </pre>

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Upload, FileText, Search, Database, CheckCircle, Clock, AlertCircle, Eye, MessageCircle, Send, Bot, User, ThumbsUp } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Upload, FileText, Search, Database, CheckCircle, Clock, AlertCircle, Eye, MessageCircle, Send, Bot, User, ThumbsUp, ExternalLink } from "lucide-react";
 import knowledgeBaseData from "../../data/knowledge_base.json";
+import { ProcessedEmail } from "../types/workflow";
 
 interface KnowledgeFile {
   id: string;
@@ -31,7 +32,15 @@ interface ChatMessage {
   metadata?: any;
 }
 
-const KnowledgeBase: React.FC = () => {
+interface KnowledgeBaseProps {
+  crossTabQueries?: string[];
+  lastAnalyzedEmail?: ProcessedEmail;
+}
+
+const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
+  crossTabQueries = [],
+  lastAnalyzedEmail
+}) => {
   const [files] = useState<KnowledgeFile[]>(knowledgeBaseData.uploaded_files);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -52,8 +61,22 @@ const KnowledgeBase: React.FC = () => {
   const [newMessage, setNewMessage] = useState("");
   const [isAgentTyping, setIsAgentTyping] = useState(false);
 
+  // Auto-populate search from cross-tab workflow
+  useEffect(() => {
+    if (lastAnalyzedEmail && crossTabQueries.length > 0) {
+      const latestQuery = crossTabQueries[crossTabQueries.length - 1];
+      if (latestQuery && latestQuery.trim()) {
+        setSearchQuery(latestQuery);
+        performIntelligentSearch(latestQuery);
+      }
+    }
+  }, [lastAnalyzedEmail, crossTabQueries]);
+
   // Enhanced search that actually works with the sample data
-  const performIntelligentSearch = (query: string): SearchResult[] => {
+  const performIntelligentSearch = async (query: string): Promise<SearchResult[]> => {
+    setIsSearching(true);
+    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
+
     const results: SearchResult[] = [];
     const searchTerms = query.toLowerCase().split(' ');
 
@@ -137,22 +160,18 @@ const KnowledgeBase: React.FC = () => {
     });
 
     // Sort by relevance score (highest first) and limit results
-    return results
+    const sortedResults = results
       .sort((a, b) => b.score - a.score)
       .slice(0, 8); // Limit to top 8 results
+
+    setSearchResults(sortedResults);
+    setIsSearching(false);
+    return sortedResults;
   };
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
-
-    setIsSearching(true);
-    
-    // Simulate processing delay for realism
-    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
-
-    const results = performIntelligentSearch(searchQuery);
-    setSearchResults(results);
-    setIsSearching(false);
+    await performIntelligentSearch(searchQuery);
   };
 
   const sendFeedbackMessage = async () => {
@@ -269,6 +288,37 @@ const KnowledgeBase: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Cross-Tab Integration Status */}
+      {lastAnalyzedEmail && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <div className="flex items-center space-x-3">
+            <ExternalLink className="w-5 h-5 text-blue-600" />
+            <div>
+              <h4 className="font-medium text-blue-900">Cross-Tab Integration Active</h4>
+              <p className="text-sm text-blue-700">
+                Knowledge base is being queried from email analysis for: <strong>{lastAnalyzedEmail.company}</strong>
+              </p>
+            </div>
+          </div>
+          {crossTabQueries.length > 0 && (
+            <div className="mt-3">
+              <div className="text-sm text-blue-800 mb-2">Recent queries from Email Analyzer:</div>
+              <div className="flex flex-wrap gap-2">
+                {crossTabQueries.slice(-3).map((query, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSearchQuery(query)}
+                    className="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full text-sm transition-colors"
+                  >
+                    "{query}"
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* File Upload Section */}
       <div className="bg-white rounded-xl border border-slate-200 p-6">
         <div className="flex items-center space-x-2 mb-4">
