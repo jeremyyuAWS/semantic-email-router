@@ -41,6 +41,7 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
   const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
   const [selectedAttachments, setSelectedAttachments] = useState<any[]>([]);
   const [showAdvancedMode, setShowAdvancedMode] = useState(false);
+  const [currentEmailContext, setCurrentEmailContext] = useState<any>(null);
 
   // Feedback System State
   const [showFeedbackChat, setShowFeedbackChat] = useState(false);
@@ -135,6 +136,9 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
         if (matchingEmail) break;
       }
     }
+
+    // Store current email context for realistic feedback
+    setCurrentEmailContext(matchingEmail);
 
     let result: AnalysisResult;
     if (matchingEmail) {
@@ -258,6 +262,7 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
         const firstEmail = advancedScenario.emails[0];
         setEmailContent(firstEmail.content);
         setSelectedAttachments(firstEmail.attachments || []);
+        setCurrentEmailContext(firstEmail);
       }
     } else {
       // Regular scenario processing
@@ -266,6 +271,7 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
         if (email) {
           setEmailContent(email.content);
           setSelectedAttachments(email.attachments || []);
+          setCurrentEmailContext(email);
           await handleAnalyze();
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
@@ -291,6 +297,7 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
       setSelectedAttachments(email.attachments || []);
       setAnalysisUpdates([]);
       setHighlightedFields(new Set());
+      setCurrentEmailContext(email);
     }
   };
 
@@ -299,48 +306,106 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
     // Handle advanced scenario completion
   };
 
-  // Rest of the component methods remain the same...
   const startFeedbackChat = () => {
     setShowFeedbackChat(true);
+    
+    // Generate contextual welcome message based on current analysis
+    let welcomeMessage = "I can help improve this email analysis! ";
+    
+    if (currentEmailContext) {
+      const industry = currentEmailContext.industry;
+      const intent = analysisResult?.intent;
+      
+      if (industry === "Manufacturing") {
+        welcomeMessage += "I notice this is a manufacturing inquiry. You can correct product specifications, material grades, quantities, or delivery requirements that I might have missed or misunderstood.";
+      } else if (industry === "Healthcare") {
+        welcomeMessage += "This appears to be a medical equipment issue. Please let me know if I misidentified equipment models, error codes, urgency levels, or service requirements.";
+      } else if (industry === "Legal") {
+        welcomeMessage += "For this legal document review request, you can correct the scope, timeline, compliance requirements, or budget I extracted from the email.";
+      } else if (industry === "Construction") {
+        welcomeMessage += "This looks like a construction/demolition service request. Help me understand if I got the service type, location details, timeline, or equipment requirements wrong.";
+      } else {
+        welcomeMessage += "You can provide corrections about the intent classification, extracted information, routing decisions, or teach me industry-specific terminology.";
+      }
+      
+      welcomeMessage += "\n\nWhat would you like to correct or improve about this analysis?";
+    } else {
+      welcomeMessage += "You can provide corrections about extracted entities, intent classification, routing tags, or teach me business jargon specific to your industry. What would you like to improve?";
+    }
+
     setChatMessages([
       {
         id: "welcome",
         type: "agent",
-        message: "I'm here to help improve the email analysis! You can provide corrections about extracted entities, intent classification, routing tags, or teach me shorthand/jargon specific to your business. What would you like to correct or improve?",
+        message: welcomeMessage,
         timestamp: new Date().toISOString()
       }
     ]);
 
+    // Show realistic auto-typing after a short delay
     setTimeout(() => {
-      simulateAutoTyping();
-    }, 1000);
+      simulateContextualFeedback();
+    }, 2000);
   };
 
-  const simulateAutoTyping = async () => {
+  const simulateContextualFeedback = async () => {
     setIsAutoTyping(true);
     
-    const sampleCorrections = [
-      "The system missed the material specification - this should be 316L stainless steel, not regular 304. Also, 'SS' means stainless steel and 'Sch 80' means Schedule 80 wall thickness.",
-      "Priority should be High, not Normal - when customers say 'ASAP' or 'urgent' that means high priority. Also missing the quantity - they want 25 pieces, not 50.",
-      "Intent should be 'Rush Order Request' not just 'Product Order' - the timeline indicates urgency. Also department should route to 'Expedited Orders' team.",
-      "The knowledge base match is wrong - this should match our emergency service catalog, not regular pricing. Customer is asking for after-hours service."
-    ];
-
-    const correctionMessage = sampleCorrections[Math.floor(Math.random() * sampleCorrections.length)];
+    // Generate realistic corrections based on current email context
+    let contextualCorrection = "";
     
+    if (currentEmailContext) {
+      const industry = currentEmailContext.industry;
+      const content = currentEmailContext.content.toLowerCase();
+      
+      if (industry === "Manufacturing") {
+        if (content.includes("304") || content.includes("stainless")) {
+          contextualCorrection = "The material spec should be 316L stainless steel, not 304 - I can see from the application this is for food processing which requires 316L grade. Also, when customers say 'Schedule 40' they mean the wall thickness specification, not a delivery schedule.";
+        } else if (content.includes("pipe") || content.includes("tube")) {
+          contextualCorrection = "Priority should be High - the customer mentioned this is for a production line that's down. In manufacturing, any production halt is automatically high priority. Also, 'OD' means Outside Diameter and 'ID' means Inside Diameter.";
+        } else {
+          contextualCorrection = "The quantity looks wrong - they mentioned '50 pieces of 20-foot lengths' which should be captured as both count (50) AND total footage (1,000 feet). This affects pricing calculation in our system.";
+        }
+      } else if (industry === "Healthcare") {
+        if (content.includes("mri") || content.includes("error")) {
+          contextualCorrection = "Error code E-2847 is actually a critical alarm, not just a warning - this should route to Emergency Biomedical Engineering, not regular maintenance. Response time should be 'Immediate' not '2 hours' for gradient coil issues.";
+        } else {
+          contextualCorrection = "This is missing the patient impact assessment - when medical equipment fails, we need to know how many patients are affected and if there are backup systems available. That determines escalation level.";
+        }
+      } else if (industry === "Legal") {
+        if (content.includes("contract") || content.includes("agreement")) {
+          contextualCorrection = "The scope is broader than just 'contract review' - this involves FDA regulatory compliance, international trade law, and IP protection. Budget should be $15,000-$25,000 range, not the standard contract review rate.";
+        } else {
+          contextualCorrection = "Timeline is too aggressive - complex international agreements with regulatory components typically need 2-3 weeks minimum, not the standard 5-day contract review timeline.";
+        }
+      } else if (industry === "Construction") {
+        if (content.includes("demolition") || content.includes("debris")) {
+          contextualCorrection = "Site access is missing - downtown locations need special permits and restricted hours (usually 7 AM - 4 PM weekdays only). This affects both pricing and scheduling. Also, 'dumpster' should be 'roll-off container' in our system.";
+        } else {
+          contextualCorrection = "HVAC projects need prevailing wage calculations since this is a public works project. The routing should go to 'Licensed Trade Division' not general 'Construction' - union requirements are different.";
+        }
+      } else {
+        contextualCorrection = "The intent classification missed the urgency indicators - phrases like 'ASAP' and 'need by Friday' should automatically flag as high priority and route to expedited handling queue.";
+      }
+    } else {
+      contextualCorrection = "The system missed some key business context. When customers use abbreviations like 'SS' for stainless steel or 'Sch 80' for Schedule 80, the entity extraction should recognize these industry standard terms.";
+    }
+    
+    // Simulate realistic typing speed
     let typedMessage = "";
-    for (let i = 0; i < correctionMessage.length; i++) {
-      typedMessage += correctionMessage[i];
+    for (let i = 0; i < contextualCorrection.length; i++) {
+      typedMessage += contextualCorrection[i];
       setNewMessage(typedMessage);
-      await new Promise(resolve => setTimeout(resolve, 50 + Math.random() * 30));
+      await new Promise(resolve => setTimeout(resolve, 30 + Math.random() * 20));
     }
     
     setIsAutoTyping(false);
     
+    // Auto-submit after typing
     setTimeout(() => {
-      sendFeedbackMessage(correctionMessage);
+      sendFeedbackMessage(contextualCorrection);
       setNewMessage("");
-    }, 1000);
+    }, 1500);
   };
 
   const sendFeedbackMessage = async (messageText?: string) => {
@@ -362,7 +427,7 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
 
     await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 2000));
 
-    let agentResponse = generateAgentResponse(messageToSend, updatedAnalysis);
+    let agentResponse = generateContextualAgentResponse(messageToSend, updatedAnalysis);
 
     const agentMessage: ChatMessage = {
       id: `agent_${Date.now()}`,
@@ -397,17 +462,50 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
     const newResult = { ...analysisResult };
     const message = feedback.toLowerCase();
 
-    if (message.includes("intent should be") || message.includes("should be classified as")) {
-      const intentMatch = message.match(/intent should be ['"]?([^'".,!?]+)['"]?/i) || 
-                         message.match(/should be classified as ['"]?([^'".,!?]+)['"]?/i);
-      if (intentMatch) {
-        const oldIntent = newResult.intent;
-        const newIntent = intentMatch[1].trim();
-        newResult.intent = newIntent;
+    // More sophisticated feedback processing based on context
+    if (message.includes("intent should be") || message.includes("should be classified as") || message.includes("actually") && message.includes("not")) {
+      const intentPatterns = [
+        /intent should be ['"]?([^'".,!?]+)['"]?/i,
+        /should be classified as ['"]?([^'".,!?]+)['"]?/i,
+        /actually (?:a|an) ['"]?([^'".,!?]+)['"]?/i,
+        /this is (?:a|an) ['"]?([^'".,!?]+)['"]?/i
+      ];
+      
+      for (const pattern of intentPatterns) {
+        const intentMatch = message.match(pattern);
+        if (intentMatch) {
+          const oldIntent = newResult.intent;
+          const newIntent = intentMatch[1].trim();
+          newResult.intent = newIntent;
+          const update: FeedbackUpdate = {
+            field: "intent",
+            oldValue: oldIntent,
+            newValue: newIntent,
+            timestamp: new Date().toISOString(),
+            confidence_improvement: 0.12,
+            emailId: `email_${Date.now()}`
+          };
+          updates.push(update);
+          onLearningUpdate(update);
+          break;
+        }
+      }
+    }
+
+    // Handle priority corrections
+    if (message.includes("priority should be") || message.includes("high priority") || message.includes("critical") || message.includes("immediate")) {
+      const priorityMatch = message.match(/priority should be ['"]?([^'".,!?]+)['"]?/i) ||
+                           (message.includes("high priority") ? ["", "High"] : null) ||
+                           (message.includes("critical") || message.includes("immediate") ? ["", "Critical"] : null);
+      
+      if (priorityMatch) {
+        const oldPriority = newResult.routing_tags.priority;
+        const newPriority = priorityMatch[1] || "High";
+        newResult.routing_tags.priority = newPriority;
         const update: FeedbackUpdate = {
-          field: "intent",
-          oldValue: oldIntent,
-          newValue: newIntent,
+          field: "routing_tags.priority",
+          oldValue: oldPriority,
+          newValue: newPriority,
           timestamp: new Date().toISOString(),
           confidence_improvement: 0.1,
           emailId: `email_${Date.now()}`
@@ -417,24 +515,72 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
       }
     }
 
-    if (message.includes("priority should be") || message.includes("department should")) {
-      if (message.includes("priority should be")) {
-        const priorityMatch = message.match(/priority should be ['"]?([^'".,!?]+)['"]?/i);
-        if (priorityMatch) {
-          const oldPriority = newResult.routing_tags.priority;
-          const newPriority = priorityMatch[1].trim();
-          newResult.routing_tags.priority = newPriority;
+    // Handle department routing corrections
+    if (message.includes("should route to") || message.includes("department should") || message.includes("route to")) {
+      const deptPatterns = [
+        /should route to ['"]?([^'".,!?]+)['"]?/i,
+        /department should be ['"]?([^'".,!?]+)['"]?/i,
+        /route to ['"]?([^'".,!?]+)['"]?/i
+      ];
+      
+      for (const pattern of deptPatterns) {
+        const deptMatch = message.match(pattern);
+        if (deptMatch) {
+          const oldDept = newResult.routing_tags.department;
+          const newDept = deptMatch[1].trim();
+          newResult.routing_tags.department = newDept;
           const update: FeedbackUpdate = {
-            field: "routing_tags.priority",
-            oldValue: oldPriority,
-            newValue: newPriority,
+            field: "routing_tags.department",
+            oldValue: oldDept,
+            newValue: newDept,
             timestamp: new Date().toISOString(),
             confidence_improvement: 0.08,
             emailId: `email_${Date.now()}`
           };
           updates.push(update);
           onLearningUpdate(update);
+          break;
         }
+      }
+    }
+
+    // Handle material/specification corrections
+    if (message.includes("316l") || message.includes("material") || message.includes("specification") || message.includes("grade")) {
+      if (newResult.entities.material_grade) {
+        const oldGrade = newResult.entities.material_grade;
+        const newGrade = message.includes("316l") ? "316L stainless steel" : 
+                        message.includes("304") ? "304 stainless steel" : "Updated specification";
+        newResult.entities.material_grade = newGrade;
+        const update: FeedbackUpdate = {
+          field: "entities.material_grade",
+          oldValue: oldGrade,
+          newValue: newGrade,
+          timestamp: new Date().toISOString(),
+          confidence_improvement: 0.15,
+          emailId: `email_${Date.now()}`
+        };
+        updates.push(update);
+        onLearningUpdate(update);
+      }
+    }
+
+    // Handle quantity corrections
+    if (message.includes("quantity") || message.includes("pieces") || message.includes("count")) {
+      const quantityMatch = message.match(/(\d+)\s*(?:pieces?|units?|count)/i);
+      if (quantityMatch && newResult.entities.quantity) {
+        const oldQuantity = newResult.entities.quantity;
+        const newQuantity = `${quantityMatch[1]} pieces`;
+        newResult.entities.quantity = newQuantity;
+        const update: FeedbackUpdate = {
+          field: "entities.quantity",
+          oldValue: oldQuantity,
+          newValue: newQuantity,
+          timestamp: new Date().toISOString(),
+          confidence_improvement: 0.1,
+          emailId: `email_${Date.now()}`
+        };
+        updates.push(update);
+        onLearningUpdate(update);
       }
     }
 
@@ -448,29 +594,45 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
     return updates;
   };
 
-  const generateAgentResponse = (feedback: string, updates: FeedbackUpdate[]): string => {
+  const generateContextualAgentResponse = (feedback: string, updates: FeedbackUpdate[]): string => {
     const message = feedback.toLowerCase();
     
     if (updates.length === 0) {
-      return "Thank you for the feedback! I've noted your suggestions and they'll help improve future analysis. Even when no immediate changes are made, your input helps train the system to better understand your business context.";
+      return "Thank you for the feedback! I've noted your suggestions and they'll help improve future analysis. Even when no immediate changes are made, your input helps train the system to better understand your specific business context and industry terminology.";
     }
 
-    let response = "Great feedback! I've made the following corrections to the analysis:\n\n";
+    let response = "Excellent feedback! I've made the following corrections:\n\n";
     
     updates.forEach(update => {
       const fieldName = update.field.split('.').pop()?.replace(/_/g, ' ') || update.field;
       response += `✓ Updated ${fieldName}: "${update.oldValue}" → "${update.newValue}"\n`;
     });
 
-    if (message.includes("316l") || message.includes("material")) {
-      response += "\nI've learned that material specifications are critical for your orders. I'll pay closer attention to steel grades in future emails.";
+    // Add contextual learning insights
+    if (currentEmailContext) {
+      const industry = currentEmailContext.industry;
+      
+      if (industry === "Manufacturing" && (message.includes("316l") || message.includes("material"))) {
+        response += "\n💡 I've learned that for food processing applications, 316L grade is required due to corrosion resistance. I'll prioritize material grade accuracy for similar manufacturing inquiries.";
+      } else if (industry === "Healthcare" && (message.includes("critical") || message.includes("emergency"))) {
+        response += "\n🚨 I now understand that medical equipment failures affecting patient care require immediate escalation, regardless of the specific error code. Patient safety is the top priority.";
+      } else if (industry === "Legal" && (message.includes("scope") || message.includes("complex"))) {
+        response += "\n⚖️ I've learned to identify when legal work involves multiple practice areas (regulatory, IP, international) which affects both timeline and pricing estimates.";
+      } else if (industry === "Construction" && (message.includes("permit") || message.includes("access"))) {
+        response += "\n🏗️ I now recognize that downtown/urban construction projects have additional constraints (permits, access hours, noise restrictions) that affect scheduling and pricing.";
+      }
     }
     
-    if (message.includes("asap") || message.includes("urgent")) {
-      response += "\nI've noted that 'ASAP' and 'urgent' indicate high priority. I'll adjust routing accordingly for time-sensitive requests.";
+    if (message.includes("asap") || message.includes("urgent") || message.includes("priority")) {
+      response += "\n⏰ I've learned to better recognize urgency indicators in customer language and will adjust priority routing accordingly.";
     }
 
-    response += `\n\nConfidence improved by ${Math.round(updates.reduce((sum, u) => sum + u.confidence_improvement, 0) * 100)}%. The analysis is now more accurate!`;
+    if (message.includes("ss") || message.includes("sch") || message.includes("od") || message.includes("abbreviation")) {
+      response += "\n📚 I've added this industry terminology to my knowledge base. Recognizing standard abbreviations improves entity extraction accuracy.";
+    }
+
+    const totalImprovement = updates.reduce((sum, u) => sum + u.confidence_improvement, 0);
+    response += `\n\n📈 Overall confidence improved by ${Math.round(totalImprovement * 100)}%. This feedback makes me more accurate for similar emails!`;
 
     return response;
   };
@@ -484,7 +646,12 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
       analysis_result: analysisResult,
       attachments: selectedAttachments,
       feedback_history: analysisUpdates,
-      learning_metrics: workflowState.learningMetrics
+      learning_metrics: workflowState.learningMetrics,
+      business_context: currentEmailContext ? {
+        industry: currentEmailContext.industry,
+        company: currentEmailContext.company,
+        complexity_score: currentEmailContext.complexity_score
+      } : null
     };
     
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -511,7 +678,11 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
           recommended_actions: analysisResult.structured_output?.next_actions,
           attachments_detected: selectedAttachments.length,
           feedback_iterations: analysisUpdates.length,
-          learning_metrics: workflowState.learningMetrics
+          learning_metrics: workflowState.learningMetrics,
+          business_context: currentEmailContext ? {
+            industry: currentEmailContext.industry,
+            complexity_level: currentEmailContext.complexity_score || 'Standard'
+          } : null
         }
       };
       navigator.clipboard.writeText(JSON.stringify(output, null, 2));
@@ -971,7 +1142,11 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
                         recommended_actions: analysisResult.structured_output?.next_actions,
                         attachments_detected: selectedAttachments.length,
                         feedback_iterations: analysisUpdates.length,
-                        learning_metrics: workflowState.learningMetrics
+                        learning_metrics: workflowState.learningMetrics,
+                        business_context: currentEmailContext ? {
+                          industry: currentEmailContext.industry,
+                          complexity_level: currentEmailContext.complexity_score || 'Standard'
+                        } : null
                       }
                     }, null, 2)}
                   </pre>
@@ -994,7 +1169,12 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900">Email Analysis Feedback</h3>
-                  <p className="text-sm text-slate-600">Improve accuracy with corrections and teach business jargon</p>
+                  <p className="text-sm text-slate-600">
+                    {currentEmailContext ? 
+                      `Reviewing ${currentEmailContext.industry} email from ${currentEmailContext.company}` :
+                      "Improve accuracy with corrections and teach business jargon"
+                    }
+                  </p>
                 </div>
               </div>
               <button
@@ -1061,7 +1241,11 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder={isAutoTyping ? "Auto-typing feedback..." : "Provide corrections about intent, entities, routing, or teach business jargon..."}
+                  placeholder={isAutoTyping ? "Auto-typing realistic feedback..." : 
+                    currentEmailContext ? 
+                    `Provide corrections about this ${currentEmailContext.industry.toLowerCase()} email analysis...` :
+                    "Provide corrections about intent, entities, routing, or teach business jargon..."
+                  }
                   className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   onKeyPress={(e) => e.key === "Enter" && !isAutoTyping && sendFeedbackMessage()}
                   disabled={isAgentTyping || isAutoTyping}
@@ -1075,7 +1259,16 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
                 </button>
               </div>
               <div className="mt-2 text-xs text-slate-500">
-                <p><strong>Examples:</strong> "Priority should be High, not Normal when customer says 'ASAP'" • "'SS' means stainless steel" • "Missing quantity - they want 25 pieces"</p>
+                {currentEmailContext ? (
+                  <p><strong>Context-aware examples:</strong> 
+                    {currentEmailContext.industry === "Manufacturing" && " \"Material should be 316L grade\" • \"Priority is high - production line down\" • \"SS means stainless steel\""}
+                    {currentEmailContext.industry === "Healthcare" && " \"This is critical, not standard priority\" • \"Error E-2847 needs immediate response\" • \"Patient impact: 12 critical care patients\""}
+                    {currentEmailContext.industry === "Legal" && " \"Scope includes international compliance\" • \"Timeline needs 2-3 weeks minimum\" • \"Budget range $15-25K\""}
+                    {currentEmailContext.industry === "Construction" && " \"Downtown requires permits\" • \"Route to Licensed Trade Division\" • \"Prevailing wage project\""}
+                  </p>
+                ) : (
+                  <p><strong>Examples:</strong> "Priority should be High when customer says 'ASAP'" • "'SS' means stainless steel" • "Missing quantity - they want 25 pieces"</p>
+                )}
               </div>
             </div>
           </div>

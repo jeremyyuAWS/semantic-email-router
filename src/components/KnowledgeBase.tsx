@@ -50,14 +50,7 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
   
   // Feedback Chat State
   const [showFeedbackChat, setShowFeedbackChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    {
-      id: "welcome",
-      type: "agent",
-      message: "Hello! I'm here to help improve the knowledge base. You can submit corrections about search results, suggest better document organization, or provide feedback on retrieval accuracy. What would you like to discuss?",
-      timestamp: new Date().toISOString()
-    }
-  ]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isAgentTyping, setIsAgentTyping] = useState(false);
 
@@ -71,6 +64,40 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
       }
     }
   }, [lastAnalyzedEmail, crossTabQueries]);
+
+  const initializeFeedbackChat = () => {
+    let welcomeMessage = "I can help improve knowledge base search and document retrieval! ";
+    
+    if (lastAnalyzedEmail) {
+      const industry = lastAnalyzedEmail.industry;
+      const company = lastAnalyzedEmail.company;
+      
+      welcomeMessage += `I see you just analyzed an email from ${company} in the ${industry} industry. `;
+      
+      if (industry === "Manufacturing") {
+        welcomeMessage += "For manufacturing searches, I can learn about product specifications, material grades, dimensions, and supplier catalogs. Help me understand if search results are missing technical details or industry terminology.";
+      } else if (industry === "Healthcare") {
+        welcomeMessage += "For medical equipment searches, I can improve how I find service codes, error code meanings, response times, and equipment specifications. Let me know if search results don't match clinical urgency or equipment details.";
+      } else if (industry === "Legal") {
+        welcomeMessage += "For legal document searches, I can better understand service rates, practice areas, compliance requirements, and case complexity. Help me improve how I match legal work scope to fee schedules.";
+      } else if (industry === "Construction") {
+        welcomeMessage += "For construction service searches, I can learn about permit requirements, union regulations, material specifications, and project timelines. Tell me if search results miss important project constraints or requirements.";
+      }
+    } else {
+      welcomeMessage += "You can help me improve document search accuracy by pointing out when results don't match what you're looking for, when important documents are missing, or when I need to understand industry-specific terminology better.";
+    }
+    
+    welcomeMessage += "\n\nWhat would you like to help me improve about the knowledge base search?";
+    
+    setChatMessages([
+      {
+        id: "welcome",
+        type: "agent",
+        message: welcomeMessage,
+        timestamp: new Date().toISOString()
+      }
+    ]);
+  };
 
   // Enhanced search that actually works with the sample data
   const performIntelligentSearch = async (query: string): Promise<SearchResult[]> => {
@@ -186,28 +213,39 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
     };
 
     setChatMessages(prev => [...prev, userMessage]);
+    const originalMessage = newMessage;
     setNewMessage("");
     setIsAgentTyping(true);
 
     // Simulate agent thinking time
     await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 2000));
 
-    // Generate contextual agent response based on message content
+    // Generate contextual agent response based on message content and search context
     let agentResponse = "";
-    const message = newMessage.toLowerCase();
+    const message = originalMessage.toLowerCase();
 
-    if (message.includes("search") || message.includes("retrieval") || message.includes("find")) {
-      agentResponse = "I understand you're providing feedback about search and retrieval functionality. I've noted your suggestions about improving how we match queries to documents. This feedback will help train the semantic matching algorithms to be more accurate. Thank you for helping improve the system!";
-    } else if (message.includes("wrong") || message.includes("incorrect") || message.includes("mistake")) {
-      agentResponse = "Thank you for the correction! I've recorded this feedback and it will be used to improve future analysis. Corrections like these are invaluable for training the models to better understand your specific business context and terminology.";
-    } else if (message.includes("missing") || message.includes("should include") || message.includes("add")) {
-      agentResponse = "I understand you'd like to see additional information or categories included. I've logged this suggestion for enhancing our entity extraction and knowledge base organization. Your input helps us understand what information is most valuable for your workflows.";
+    if (message.includes("search") || message.includes("didn't find") || message.includes("missing") || message.includes("not finding")) {
+      if (searchQuery.includes("stainless") || searchQuery.includes("steel") || searchQuery.includes("316") || searchQuery.includes("304")) {
+        agentResponse = "I understand the search isn't finding the right stainless steel specifications. I'll improve how I match material grades (304 vs 316L), dimensions (OD, wall thickness), and surface finishes. This is crucial for manufacturing inquiries where wrong material specs can be costly. Your feedback helps me understand that steel grade accuracy is critical for food processing vs general industrial applications.";
+      } else if (searchQuery.includes("mri") || searchQuery.includes("error") || searchQuery.includes("medical")) {
+        agentResponse = "You're right that medical equipment searches need better error code matching. I'll enhance how I connect equipment models with specific error codes, response times, and service requirements. For medical equipment, getting the wrong service response can affect patient care, so accuracy is critical. I'm learning to prioritize emergency vs routine service codes.";
+      } else if (searchQuery.includes("demolition") || searchQuery.includes("hvac") || searchQuery.includes("construction")) {
+        agentResponse = "I see the construction service searches need improvement. I'll better understand permit requirements, union constraints, site access limitations, and equipment specifications. Construction projects have many variables (location, timing, regulations) that affect service delivery. Your feedback helps me learn these dependencies.";
+      } else if (searchQuery.includes("contract") || searchQuery.includes("legal") || searchQuery.includes("compliance")) {
+        agentResponse = "The legal document searches should better match practice areas, compliance requirements, and fee structures. I'll improve how I understand contract complexity levels, regulatory scope, and appropriate attorney expertise. Legal work varies dramatically in scope and I'm learning to match complexity to resources.";
+      } else {
+        agentResponse = "Thank you for the search feedback! I'm noting what types of documents and information you expected to find. This helps me improve semantic matching between queries and our knowledge base content. I'll adjust how I weight different document sections and metadata for better retrieval accuracy.";
+      }
+    } else if (message.includes("wrong") || message.includes("incorrect") || message.includes("should") || message.includes("actually")) {
+      agentResponse = "I appreciate the correction! I'm updating how I categorize and tag this type of content. When you tell me what should have been found instead, it helps train my understanding of your business context and terminology. These corrections directly improve future search accuracy for similar queries.";
+    } else if (message.includes("terminology") || message.includes("abbreviation") || message.includes("means") || message.includes("jargon")) {
+      agentResponse = "Excellent! Learning industry terminology is crucial for accurate search. I'm adding this language to my understanding of your business domain. When you teach me that 'SS' means stainless steel or 'Sch 80' refers to wall thickness, it helps me better match customer language to technical specifications in your catalogs.";
+    } else if (message.includes("priority") || message.includes("urgent") || message.includes("emergency")) {
+      agentResponse = "I understand this involves urgency classification in search results. I'm learning to better surface emergency procedures, expedited services, and critical response information when queries indicate time-sensitive situations. This helps ensure urgent requests get matched to appropriate service levels and response times.";
     } else if (message.includes("confidence") || message.includes("score") || message.includes("accuracy")) {
-      agentResponse = "Your feedback about confidence scores and accuracy is very helpful. I'll adjust the confidence thresholds and note patterns where the system should be more or less certain. This type of feedback directly improves our reliability metrics.";
-    } else if (message.includes("routing") || message.includes("department") || message.includes("priority")) {
-      agentResponse = "I've recorded your routing and priority feedback. Understanding your organization's specific workflows helps me learn the correct department assignments and urgency levels. This will improve automatic routing accuracy for similar emails in the future.";
+      agentResponse = "Your feedback about confidence and accuracy is very valuable. I'll adjust how I score search results and set thresholds for what constitutes a good match. When you tell me results should be more or less confident, it helps calibrate my matching algorithms to your business standards.";
     } else {
-      agentResponse = "Thank you for your feedback! I've processed and recorded your input. This information will be used to improve the system's understanding and performance. Every piece of feedback helps train the models to work better with your specific use cases and business requirements.";
+      agentResponse = "Thank you for this feedback! I'm processing your input and updating my understanding of how to better serve your knowledge base searches. Every piece of feedback helps me learn your business context, terminology, and what information is most important for different types of inquiries. This improves search accuracy for your entire team.";
     }
 
     const agentMessage: ChatMessage = {
@@ -217,13 +255,18 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
       timestamp: new Date().toISOString(),
       metadata: {
         feedback_processed: true,
-        confidence_adjustment: Math.random() * 0.1 + 0.05, // Simulate learning impact
-        training_data_added: true
+        search_improvements_applied: true,
+        confidence_adjustment: Math.random() * 0.1 + 0.05
       }
     };
 
     setIsAgentTyping(false);
     setChatMessages(prev => [...prev, agentMessage]);
+  };
+
+  const startFeedbackChat = () => {
+    setShowFeedbackChat(true);
+    initializeFeedbackChat();
   };
 
   const getStatusIcon = (status: string) => {
@@ -278,12 +321,12 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
   };
 
   const quickSearchExamples = [
-    "stainless steel pipe",
-    "demolition service",
-    "MRI repair",
-    "contract review pricing",
-    "HVAC installation",
-    "pharmaceutical 340B"
+    "316L stainless steel pipe pharmaceutical",
+    "emergency medical equipment MRI",
+    "demolition debris pickup downtown",
+    "contract review legal services international",
+    "HVAC installation prevailing wage",
+    "340B pharmaceutical compliance"
   ];
 
   return (
@@ -296,7 +339,7 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
             <div>
               <h4 className="font-medium text-blue-900">Cross-Tab Integration Active</h4>
               <p className="text-sm text-blue-700">
-                Knowledge base is being queried from email analysis for: <strong>{lastAnalyzedEmail.company}</strong>
+                Knowledge base is being queried from email analysis for: <strong>{lastAnalyzedEmail.company}</strong> ({lastAnalyzedEmail.industry})
               </p>
             </div>
           </div>
@@ -461,7 +504,7 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
             <h3 className="text-lg font-semibold text-slate-900">Intelligent Document Retrieval</h3>
           </div>
           <button
-            onClick={() => setShowFeedbackChat(true)}
+            onClick={startFeedbackChat}
             className="flex items-center space-x-2 px-4 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
           >
             <MessageCircle className="w-4 h-4" />
@@ -474,7 +517,7 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search knowledge base (e.g., 'stainless steel pipe 304', 'emergency repair')"
+            placeholder="Search knowledge base (e.g., '316L stainless steel pharmaceutical grade', 'MRI error code E-2847')"
             className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             onKeyPress={(e) => e.key === "Enter" && handleSearch()}
           />
@@ -489,7 +532,7 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
 
         {/* Quick Search Examples */}
         <div className="mb-6">
-          <p className="text-sm text-slate-600 mb-2">Try these searches:</p>
+          <p className="text-sm text-slate-600 mb-2">Try these industry-specific searches:</p>
           <div className="flex flex-wrap gap-2">
             {quickSearchExamples.map((example, index) => (
               <button
@@ -588,7 +631,12 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900">Knowledge Base Feedback</h3>
-                  <p className="text-sm text-slate-600">Help improve search and retrieval accuracy</p>
+                  <p className="text-sm text-slate-600">
+                    {lastAnalyzedEmail ? 
+                      `Reviewing search results for ${lastAnalyzedEmail.industry} context` :
+                      "Help improve search and retrieval accuracy"
+                    }
+                  </p>
                 </div>
               </div>
               <button
@@ -618,11 +666,11 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
                         ? 'bg-blue-600 text-white' 
                         : 'bg-slate-100 text-slate-900'
                     }`}>
-                      <p className="text-sm">{message.message}</p>
+                      <p className="text-sm whitespace-pre-line">{message.message}</p>
                       {message.metadata?.feedback_processed && (
                         <div className="flex items-center space-x-1 mt-2 text-xs text-indigo-600">
                           <ThumbsUp className="w-3 h-3" />
-                          <span>Feedback processed for training</span>
+                          <span>Search improvements applied</span>
                         </div>
                       )}
                     </div>
@@ -655,7 +703,11 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Describe corrections or feedback about search results..."
+                  placeholder={
+                    lastAnalyzedEmail ? 
+                    `Feedback about ${lastAnalyzedEmail.industry.toLowerCase()} search results...` :
+                    "Describe corrections or feedback about search results..."
+                  }
                   className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   onKeyPress={(e) => e.key === "Enter" && sendFeedbackMessage()}
                   disabled={isAgentTyping}
@@ -669,7 +721,11 @@ const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
                 </button>
               </div>
               <p className="text-xs text-slate-500 mt-2">
-                Example: "The search didn't find the stainless steel pricing I was looking for" or "MRI results should show emergency response times"
+                {lastAnalyzedEmail ? (
+                  <span><strong>Context examples:</strong> "Search didn't find the {lastAnalyzedEmail.industry.toLowerCase()} specifications I needed" • "Missing emergency response procedures" • "Wrong material grade results"</span>
+                ) : (
+                  <span><strong>Examples:</strong> "Search didn't find the stainless steel pricing I was looking for" • "MRI results should show emergency response times" • "Missing permit requirements for downtown projects"</span>
+                )}
               </p>
             </div>
           </div>

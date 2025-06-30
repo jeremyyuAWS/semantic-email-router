@@ -15,241 +15,310 @@
           "description": "Job site photos and measurements"
         }
       ],
-      "content": "Hi there,\n\nCan you send over a quote for a debris pickup from the downtown job site? We need 5 dumpsters by Friday for our concrete demolition project. The site is at 123 Main Street downtown. Let me know pricing and availability.\n\nThanks,\nMike Johnson\nTiny's Demolition Services\n(555) 123-4567\nmjohnson@tinysdemolition.com",
+      "content": "Hi there,\n\nI need a quote for debris pickup from our downtown job site ASAP. We've got 5 dumpsters worth of concrete demolition debris that needs to be cleared by Friday or we'll face penalties from the city.\n\nThe site is at 123 Main Street downtown - it's a tight space with limited truck access between 8 AM and 4 PM only due to traffic restrictions. We'll need roll-off containers, not standard dumpsters.\n\nThis is a union job so prevailing wage rates apply. The debris includes some rebar mixed in with the concrete - is that extra cost for sorting?\n\nPlease let me know pricing and confirm you can meet the Friday deadline. The general contractor is breathing down my neck on this one.\n\nThanks,\nMike Johnson\nSite Supervisor\nTiny's Demolition Services\n(555) 123-4567\nmjohnson@tinysdemolition.com",
       "expected_analysis": {
-        "intent": "Service Quote Request",
+        "intent": "Emergency Service Request",
         "entities": {
           "service": "Debris Pickup",
-          "quantity": "5 dumpsters",
-          "location": "Downtown job site, 123 Main Street",
+          "quantity": "5 dumpsters worth",
+          "material_type": "Concrete demolition debris with rebar",
+          "location": "123 Main Street downtown",
           "due_date": "Friday",
-          "material_type": "Concrete demolition debris",
+          "access_restrictions": "8 AM - 4 PM only, tight space",
+          "special_requirements": "Roll-off containers, prevailing wage, rebar sorting",
           "contact_phone": "(555) 123-4567",
-          "contact_email": "mjohnson@tinysdemolition.com"
+          "contact_email": "mjohnson@tinysdemolition.com",
+          "urgency_indicators": "ASAP, penalties, breathing down neck"
         },
         "routing_tags": {
-          "department": "Operations",
-          "urgency": "High",
-          "service_line": "Waste Management",
-          "matched_service_code": "DPK-05",
-          "requires_site_visit": true
+          "department": "Emergency Operations",
+          "priority": "High",
+          "urgency": "Critical - Friday deadline",
+          "service_line": "Commercial Waste Management",
+          "matched_service_code": "DPK-05-EMRG",
+          "requires_site_visit": true,
+          "special_handling": "Prevailing wage, rebar separation",
+          "access_constraints": "Limited downtown access"
         },
-        "confidence": 0.94
+        "confidence": 0.96
       }
     },
     {
       "id": "email_002", 
       "company": "Penn Stainless",
       "industry": "Manufacturing",
-      "subject": "Order Request - 304 Stainless Pipe",
+      "subject": "Urgent Order - 316L SS Pipe for Food Processing Line",
       "sender": "Sarah Chen <s.chen@chenmanufacturing.com>",
       "timestamp": "2025-01-15T10:15:00Z",
       "attachments": [
         {
-          "name": "specifications.pdf",
+          "name": "FDA_compliance_specs.pdf",
           "type": "PDF",
           "size": "1.8 MB",
-          "description": "Detailed pipe specifications and tolerances"
+          "description": "FDA 21 CFR 177.2600 compliance requirements"
         },
         {
-          "name": "project_drawings.dwg",
+          "name": "production_line_drawings.dwg",
           "type": "CAD",
           "size": "4.2 MB",
-          "description": "Engineering drawings"
+          "description": "Engineering drawings showing pipe routing"
         }
       ],
-      "content": "Hello,\n\nI'd like to place an order for 1.5\" OD 304 stainless steel pipe, 20-ft lengths. We need 50 pieces for our upcoming project. Can you provide pricing and lead time?\n\nPlease confirm specifications:\n- Material: 304 stainless steel\n- Outside diameter: 1.5 inches\n- Length: 20 feet each\n- Quantity: 50 pieces\n- Wall thickness: Schedule 40\n\nBest regards,\nSarah Chen\nChen Manufacturing\nPhone: (555) 987-6543\ns.chen@chenmanufacturing.com",
+      "content": "Hello,\n\nWe have an urgent order for our food processing line that's currently down. I need to place an order for 316L stainless steel pipe - NOT 304 grade as that won't meet FDA requirements for direct food contact.\n\nSpecifications:\n- Material: 316L stainless steel (pharmaceutical grade)\n- Outside diameter: 2.5 inches\n- Length: 20-foot sections\n- Quantity: 75 pieces (total 1,500 feet)\n- Wall thickness: Schedule 80\n- Surface finish: #4 brushed, passivated per ASTM A967\n- Certification: Mill test certificates required for each heat lot\n\nThis is for a dairy processing facility so we need full FDA 21 CFR 177.2600 compliance documentation. The production line has been down since Monday and we're losing $15K per day.\n\nCan you confirm:\n1. 316L grade in stock (not 304)\n2. Lead time for 75 pieces\n3. Can you expedite shipping?\n4. Total pricing including certs\n\nWe need this by next Friday at the latest or we'll have to source elsewhere.\n\nBest regards,\nSarah Chen, P.E.\nSenior Process Engineer\nChen Manufacturing\nPhone: (555) 987-6543\ns.chen@chenmanufacturing.com",
       "expected_analysis": {
-        "intent": "Product Order Request",
+        "intent": "Urgent Product Order Request",
         "entities": {
-          "product": "304 stainless steel pipe",
-          "specifications": "1.5\" OD, 20-ft length, Schedule 40",
-          "quantity": "50 pieces",
-          "material_grade": "304 stainless steel",
+          "product": "316L stainless steel pipe",
+          "specifications": "2.5\" OD, 20-ft length, Schedule 80, #4 brushed finish",
+          "quantity": "75 pieces (1,500 total feet)",
+          "material_grade": "316L stainless steel (NOT 304)",
+          "application": "Food processing - dairy facility",
+          "compliance_required": "FDA 21 CFR 177.2600, ASTM A967",
+          "certifications": "Mill test certificates for each heat lot",
+          "deadline": "Next Friday",
+          "business_impact": "$15K per day loss",
           "contact_phone": "(555) 987-6543",
-          "contact_email": "s.chen@chenmanufacturing.com"
+          "contact_email": "s.chen@chenmanufacturing.com",
+          "urgency_indicators": "urgent, down since Monday, losing money"
         },
         "routing_tags": {
-          "product_line": "Pipe & Tubing",
-          "priority": "Normal",
-          "department": "Sales",
-          "matched_catalog_sku": "PIP-304-1.5OD-SCH40",
-          "requires_quote": true
+          "department": "Stainless Steel Sales",
+          "priority": "Critical",
+          "product_line": "Food Grade Pipe & Tubing",
+          "matched_catalog_sku": "PIP-316L-2.5OD-SCH80",
+          "requires_quote": true,
+          "compliance_review": true,
+          "expedited_processing": true,
+          "material_verification": "316L grade confirmation required"
         },
-        "confidence": 0.97
+        "confidence": 0.98
       }
     },
     {
       "id": "email_003",
       "company": "St. Mary's Hospital",
       "industry": "Healthcare",
-      "subject": "Urgent - Medical Equipment Repair Request",
+      "subject": "CRITICAL - MRI Down, 12 Patients Affected",
       "sender": "Dr. Patricia Martinez <p.martinez@stmarys.health>",
       "timestamp": "2025-01-15T14:22:00Z",
       "attachments": [
         {
-          "name": "error_log.txt",
+          "name": "error_log_complete.txt",
           "type": "Text",
-          "size": "45 KB",
-          "description": "Equipment error log from past 48 hours"
+          "size": "78 KB",
+          "description": "Complete equipment error log from past 48 hours"
         },
         {
-          "name": "warranty_info.pdf",
+          "name": "patient_impact_report.pdf",
           "type": "PDF",
           "size": "892 KB",
-          "description": "Equipment warranty and service contract"
+          "description": "Clinical impact assessment and risk mitigation"
         }
       ],
-      "content": "URGENT - Medical Equipment Issue\n\nOur MRI Unit #3 (Model: Siemens Magnetom Vida) in the Radiology Department has been showing intermittent error codes since yesterday morning. The unit is critical for our cardiac imaging program.\n\nError Code: E-2847 (Gradient coil temperature warning)\nSerial Number: SMV-2019-0847\nLast Service: September 2024\n\nWe need immediate technical support. This affects patient care directly.\n\nContact: Dr. Patricia Martinez\nRadiology Department\nSt. Mary's Hospital\nDirect: (555) 234-7890\nEmergency: (555) 234-7800\np.martinez@stmarys.health",
+      "content": "CRITICAL MEDICAL EQUIPMENT FAILURE\n\nOur primary MRI Unit #3 (Siemens Magnetom Vida, Serial: SMV-2019-0847) in the Cardiac Imaging Department has been down since 2:15 AM with cascading error codes.\n\nError Details:\n- Primary Error: E-2847 (Gradient coil temperature critical alarm)\n- Secondary Errors: E-2851, E-2863 (cooling system failures)\n- Patient Impact: 12 cardiac imaging studies cancelled\n- Backup Unit #1 is at capacity, Unit #2 in scheduled maintenance\n\nClinical Impact:\n- 3 emergency cardiac catheterization procedures postponed\n- 2 stroke protocol imaging delays (time-critical)\n- 7 routine cardiac MRI studies rescheduled\n- Estimated patient care delay: 4-6 hours minimum\n\nImmediate Requirements:\n- Emergency biomedical technician dispatch (Level 3 certified)\n- Gradient coil temperature sensor replacement (likely cause)\n- Cooling system diagnostic and repair\n- Response time: IMMEDIATE - patient safety critical\n\nLast Service: September 15, 2024 (preventive maintenance)\nWarranty Status: Active service contract through Siemens\nOn-site Contact: Biomedical Engineering (ext. 5847)\n\nThis is a patient safety issue affecting our cardiac emergency protocols. We need immediate technical response with ETA confirmation.\n\nDr. Patricia Martinez, MD\nChief of Cardiology\nSt. Mary's Hospital\nDirect: (555) 234-7890\nEmergency: (555) 234-7800\np.martinez@stmarys.health\n\nCC: BiomedEngineering@stmarys.health, RiskManagement@stmarys.health",
       "expected_analysis": {
-        "intent": "Emergency Service Request",
+        "intent": "Critical Medical Equipment Emergency",
         "entities": {
-          "equipment": "Siemens Magnetom Vida MRI",
-          "error_code": "E-2847",
+          "equipment": "Siemens Magnetom Vida MRI Unit #3",
           "serial_number": "SMV-2019-0847",
-          "location": "Radiology Department",
-          "urgency": "Critical",
+          "primary_error": "E-2847 - Gradient coil temperature critical",
+          "secondary_errors": "E-2851, E-2863 - cooling system",
+          "location": "Cardiac Imaging Department",
+          "patient_impact": "12 studies cancelled, 3 emergencies postponed",
+          "urgency": "IMMEDIATE - patient safety critical",
+          "required_technician": "Level 3 certified biomedical engineer",
+          "likely_repair": "Gradient coil temperature sensor replacement",
           "contact_phone": "(555) 234-7890",
+          "emergency_phone": "(555) 234-7800",
           "contact_email": "p.martinez@stmarys.health"
         },
         "routing_tags": {
-          "department": "Medical Equipment Services",
-          "priority": "Critical",
+          "department": "Emergency Biomedical Services",
+          "priority": "CRITICAL",
+          "response_time": "Immediate",
           "service_type": "Emergency Repair",
-          "response_time": "2 hours",
-          "escalation_required": true
+          "escalation_required": true,
+          "patient_safety_impact": true,
+          "equipment_type": "MRI",
+          "manufacturer": "Siemens",
+          "warranty_status": "Active"
         },
-        "confidence": 0.96
+        "confidence": 0.99
       }
     },
     {
       "id": "email_004",
       "company": "Morrison & Associates Law",
       "industry": "Legal",
-      "subject": "Document Review - Contract Analysis Needed",
+      "subject": "Complex International Supply Agreement - Urgent Review Required",
       "sender": "James Morrison <j.morrison@morrisonlaw.com>",
       "timestamp": "2025-01-15T11:45:00Z",
       "attachments": [
         {
-          "name": "supply_agreement_v3.pdf",
+          "name": "supply_agreement_master_v5.pdf",
           "type": "PDF",
-          "size": "3.7 MB",
-          "description": "Multi-party supply agreement requiring review"
+          "size": "6.7 MB",
+          "description": "142-page international supply agreement with exhibits"
         },
         {
-          "name": "redlines_summary.docx",
-          "type": "Word",
-          "size": "156 KB",
-          "description": "Summary of requested contract changes"
+          "name": "regulatory_compliance_matrix.xlsx",
+          "type": "Excel",
+          "size": "2.1 MB",
+          "description": "FDA, CE Mark, and international regulatory requirements"
+        },
+        {
+          "name": "IP_landscape_analysis.pptx",
+          "type": "PowerPoint",
+          "size": "8.4 MB",
+          "description": "Patent freedom-to-operate analysis across 15 jurisdictions"
         }
       ],
-      "content": "Good morning,\n\nWe require comprehensive contract analysis for a new multi-party supply agreement. The contract involves international shipping terms, intellectual property clauses, and regulatory compliance requirements.\n\nScope of Review Needed:\n- Risk assessment (liability, force majeure, termination)\n- Compliance with FDA regulations for medical device components\n- International trade law implications\n- IP protection and confidentiality provisions\n\nDeadline: End of week (Friday, January 17th)\nBudget: $15,000 - $25,000 range\n\nPlease confirm availability and provide time estimate.\n\nRegards,\nJames Morrison, Esq.\nSenior Partner\nMorrison & Associates\n(555) 456-7890\nj.morrison@morrisonlaw.com",
+      "content": "Good morning,\n\nWe require immediate comprehensive legal analysis for a critical international supply agreement. This is significantly more complex than standard contract review work.\n\n**Transaction Overview:**\n- Multi-party agreement: US manufacturer, Swiss licensor, EU distributors\n- Medical device components with FDA Class II requirements\n- Cross-border IP licensing involving 23 patent families\n- Deal value: $847M over 7 years with milestone payments\n- Regulatory compliance across US, EU, UK, Canada, Japan\n\n**Urgent Legal Issues:**\n1. **Regulatory Compliance Harmonization**\n   - FDA 510(k) clearance coordination with CE marking\n   - MDSAP (Medical Device Single Audit Program) requirements\n   - Post-Brexit UK regulatory pathway alignment\n   - Japanese PMDA consultation strategy\n\n2. **International IP & Trade Law**\n   - Patent prosecution strategy across 15 jurisdictions\n   - Export control compliance (ITAR, EAR, EU dual-use)\n   - Technology transfer restrictions to certain countries\n   - IP indemnification for regulatory non-compliance\n\n3. **Cross-Border Commercial Terms**\n   - Force majeure provisions (post-COVID lessons)\n   - Currency hedging for €/CHF/USD payments\n   - International arbitration venue (ICC vs LCIA vs JAMS)\n   - Governing law selection (Delaware vs Swiss vs English)\n\n**Timeline Constraints:**\n- Board approval required: January 25th (firm deadline)\n- Regulatory submissions: Q2 2025 planned\n- Commercial production: Q4 2025 target\n- Legal spend approved: $85,000 - $120,000 range\n\n**Scope Requirements:**\n- Senior partner oversight (international M&A experience)\n- Regulatory law specialist (medical device expertise)\n- IP counsel coordination (patent prosecution background)\n- Estimated 180-220 billable hours\n\nThis transaction represents 15% of our annual revenue. Any regulatory delays could jeopardize the entire deal structure.\n\nPlease confirm:\n1. Senior partner availability for January 16-25 period\n2. Regulatory specialist assignment\n3. Preliminary risk assessment timeline\n4. Fee estimate with breakdown by practice area\n\nRegards,\nJames Morrison, Esq.\nSenior Partner & Managing Director\nMorrison & Associates\nDirect: (555) 456-7890\nCell: (555) 456-7891\nj.morrison@morrisonlaw.com",
       "expected_analysis": {
-        "intent": "Professional Service Request",
+        "intent": "Complex Legal Services Request",
         "entities": {
-          "service": "Contract Analysis",
-          "document_type": "Multi-party supply agreement",
-          "deadline": "Friday, January 17th",
-          "budget_range": "$15,000 - $25,000",
-          "compliance_areas": "FDA, International trade, IP protection",
+          "service_type": "International supply agreement review",
+          "transaction_value": "$847M over 7 years",
+          "parties": "US manufacturer, Swiss licensor, EU distributors", 
+          "regulatory_scope": "FDA, CE Mark, UK, Canada, Japan",
+          "ip_complexity": "23 patent families across 15 jurisdictions",
+          "deadline": "January 25th board approval",
+          "budget_range": "$85,000 - $120,000",
+          "estimated_hours": "180-220 billable hours",
+          "business_impact": "15% of annual revenue",
+          "required_expertise": "International M&A, Regulatory, IP counsel",
           "contact_phone": "(555) 456-7890",
           "contact_email": "j.morrison@morrisonlaw.com"
         },
         "routing_tags": {
-          "department": "Legal Services",
-          "priority": "High",
-          "service_type": "Contract Review",
-          "expertise_required": "International Law, IP, Regulatory",
-          "budget_tier": "Premium"
+          "department": "International Corporate Law",
+          "priority": "Critical",
+          "expertise_required": "Senior Partner + Regulatory + IP",
+          "service_type": "Complex Transaction Review",
+          "budget_tier": "Premium ($85K-120K)",
+          "escalation": "Managing Partner approval",
+          "regulatory_flags": "FDA, ITAR, Multi-jurisdiction",
+          "timeline": "9-day deadline"
         },
-        "confidence": 0.93
+        "confidence": 0.97
       }
     },
     {
       "id": "email_005",
       "company": "Blue Ridge Construction",
       "industry": "Construction",
-      "subject": "Subcontractor Bid - HVAC Installation",
+      "subject": "Prevailing Wage HVAC Installation - Municipal Building",
       "sender": "Carlos Rodriguez <c.rodriguez@blueridgeconstruction.com>",
       "timestamp": "2025-01-15T09:20:00Z",
       "attachments": [
         {
-          "name": "building_plans.pdf",
+          "name": "municipal_building_plans.pdf",
           "type": "PDF",
-          "size": "12.4 MB",
-          "description": "Architectural drawings and HVAC layouts"
+          "size": "18.7 MB",
+          "description": "Architectural drawings and HVAC system layouts"
         },
         {
-          "name": "specifications.xlsx",
+          "name": "prevailing_wage_rates.xlsx",
           "type": "Excel",
-          "size": "2.1 MB",
-          "description": "Equipment specifications and quantities"
+          "size": "892 KB",
+          "description": "Current prevailing wage rates by trade classification"
+        },
+        {
+          "name": "union_requirements.docx",
+          "type": "Word",
+          "size": "1.4 MB",
+          "description": "Local union jurisdiction and manning requirements"
         }
       ],
-      "content": "Hello,\n\nWe're seeking bids for HVAC installation on a new 45,000 sq ft office building project. The job includes:\n\n- Installation of 8 rooftop units (5-ton capacity each)\n- Ductwork throughout 3 floors\n- VAV boxes and controls system\n- Building automation integration\n\nProject Timeline: March 1 - May 15, 2025\nLocation: 1247 Commerce Drive, Industrial Park\nGeneral Contractor: Blue Ridge Construction\n\nPrevailing wage project. Licensed contractors only.\n\nBid deadline: January 25th, 2025\n\nContact for site visit:\nCarlos Rodriguez\nProject Manager\nBlue Ridge Construction\n(555) 789-0123\nc.rodriguez@blueridgeconstruction.com",
+      "content": "Hello,\n\nWe're seeking qualified mechanical contractors for HVAC installation on a municipal building project. This is a prevailing wage job with strict union requirements.\n\n**Project Details:**\n- New 67,500 sq ft municipal services building\n- 12 rooftop units (7.5-ton capacity each)\n- Complete ductwork installation throughout 4 floors\n- VAV boxes with DDC controls integration\n- Energy recovery ventilation system\n- Building automation system tie-in\n\n**Critical Requirements:**\n- MUST be licensed mechanical contractor (state license verification)\n- Union shop with Local 157 jurisdiction agreement\n- Prevailing wage rates apply (see attached schedule)\n- Certified welders for all refrigerant line work\n- NEBB certification for testing, adjusting, balancing\n\n**Project Timeline:**\n- Award Date: February 15, 2025\n- Mobilization: March 1, 2025\n- Substantial Completion: June 30, 2025\n- Final Completion: July 15, 2025\n- Liquidated Damages: $2,500/day for late completion\n\n**Location & Logistics:**\n- 1247 Commerce Drive, Municipal Complex\n- Secure site - background checks required for all workers\n- Material deliveries: 6 AM - 3 PM weekdays only\n- Noise restrictions: No impact work before 7 AM\n- Parking extremely limited - coordinate with site superintendent\n\n**Bid Requirements:**\n- Bid bond: 5% of bid amount\n- Performance & payment bonds: 100% of contract value\n- Insurance: $2M general liability, $1M auto, workers comp\n- Three municipal project references (last 5 years)\n- Union agreement documentation\n- Licensed contractor certificate (current)\n\n**Key Specifications:**\n- HVAC equipment: Energy Star rated, minimum 16 SEER\n- Ductwork: Galvanized steel, sealed per SMACNA standards\n- Controls: BACnet compatible, web-based interface\n- Commissioning: Full system commissioning by certified agent\n\nBid deadline: January 30, 2025 at 2:00 PM\nMandatory pre-bid meeting: January 22, 2025 at 10:00 AM on-site\n\nEstimated contract value: $850,000 - $1,200,000\n\nPlease confirm:\n1. Union Local 157 agreement status\n2. Municipal project experience\n3. Licensed contractor verification\n4. Bonding capacity availability\n\nContact for site visit coordination:\nCarlos Rodriguez\nProject Manager\nBlue Ridge Construction\n(555) 789-0123\nc.rodriguez@blueridgeconstruction.com",
       "expected_analysis": {
-        "intent": "Bid Request",
+        "intent": "Municipal Contract Bid Request",
         "entities": {
-          "project_type": "HVAC Installation",
-          "building_size": "45,000 sq ft",
-          "equipment": "8 rooftop units, 5-ton capacity",
-          "timeline": "March 1 - May 15, 2025",
-          "location": "1247 Commerce Drive, Industrial Park",
-          "bid_deadline": "January 25th, 2025",
+          "project_type": "HVAC installation - municipal building",
+          "building_size": "67,500 sq ft, 4 floors",
+          "equipment": "12 rooftop units (7.5-ton each), VAV boxes, ERV",
+          "contract_value": "$850,000 - $1,200,000",
+          "timeline": "March 1 - July 15, 2025",
+          "location": "1247 Commerce Drive, Municipal Complex",
+          "bid_deadline": "January 30, 2025 at 2:00 PM",
+          "pre_bid_meeting": "January 22, 2025 at 10:00 AM",
+          "liquidated_damages": "$2,500/day",
+          "union_requirement": "Local 157 jurisdiction",
+          "licensing": "State licensed mechanical contractor",
+          "bonding": "5% bid bond, 100% performance/payment",
           "contact_phone": "(555) 789-0123",
           "contact_email": "c.rodriguez@blueridgeconstruction.com"
         },
         "routing_tags": {
-          "department": "HVAC Division",
+          "department": "Municipal Projects Division",
           "priority": "High",
-          "project_type": "Commercial",
+          "project_type": "Public Works - Prevailing Wage",
           "requires_license": true,
-          "prevailing_wage": true
+          "union_required": true,
+          "bonding_required": true,
+          "security_clearance": "Background checks required",
+          "bid_opportunity": true,
+          "contract_tier": "Large ($850K-$1.2M)"
         },
-        "confidence": 0.91
+        "confidence": 0.95
       }
     },
     {
       "id": "email_006",
       "company": "Regional Medical Center",
       "industry": "Healthcare",
-      "subject": "Pharmaceutical Supply Agreement Renewal",
+      "subject": "340B Pharmaceutical Contract Renewal - $4.2M Annual",
       "sender": "Dr. Lisa Park <l.park@regionalmedical.org>",
       "timestamp": "2025-01-15T13:10:00Z",
       "attachments": [
         {
-          "name": "current_formulary.xlsx",
+          "name": "340b_utilization_report.xlsx",
           "type": "Excel",
-          "size": "5.8 MB",
-          "description": "Current pharmaceutical formulary and usage data"
+          "size": "7.2 MB",
+          "description": "12-month 340B program utilization and savings analysis"
         },
         {
-          "name": "pricing_comparison.pdf",
+          "name": "formulary_gap_analysis.pdf",
           "type": "PDF",
-          "size": "1.2 MB",
-          "description": "Competitive pricing analysis"
+          "size": "3.1 MB",
+          "description": "Therapeutic gaps and new drug additions needed"
+        },
+        {
+          "name": "compliance_audit_2024.pdf",
+          "type": "PDF",
+          "size": "2.8 MB",
+          "description": "Annual 340B compliance audit results and recommendations"
         }
       ],
-      "content": "Dear Procurement Team,\n\nWe need to renew our pharmaceutical supply agreement before the current contract expires on March 31st. Our annual pharmaceutical spend is approximately $2.8M.\n\nKey Requirements:\n- 24/7 emergency delivery capability\n- 340B pricing compliance\n- Cold chain management for biologics\n- Real-time inventory tracking\n- Minimum 98% fill rate guarantee\n\nCritical medications include:\n- Oncology drugs (specialty handling required)\n- Emergency medications (code cart supplies)\n- Surgical anesthetics\n- ICU critical care medications\n\nPlease schedule a meeting to discuss terms by January 20th.\n\nDr. Lisa Park\nChief of Pharmacy\nRegional Medical Center\nPhone: (555) 321-9876\nl.park@regionalmedical.org",
+      "content": "Dear Procurement Partners,\n\nWe need to renew our pharmaceutical supply agreement before the current contract expires March 31st. Our 340B-qualified hospital requires specialized pricing and compliance management.\n\n**Contract Overview:**\n- Annual pharmaceutical spend: $4.2M (340B eligible: $3.1M)\n- Covered entities: Main hospital + 3 off-site clinics\n- Patient population: 68% Medicaid, 22% uninsured, 10% commercial\n- 340B savings target: $890K annually (28.7% off WAC)\n\n**Critical Requirements:**\n\n**1. 340B Program Compliance**\n- Real-time duplicate discount prevention\n- Automated split-billing for eligible/ineligible patients\n- Quarterly compliance reporting (HRSA audit ready)\n- Contract pharmacy management (CVS, Walgreens arrangements)\n- Medicaid carve-out state compliance (varies by state)\n\n**2. Clinical Pharmacy Services**\n- 24/7 emergency drug delivery (within 2 hours)\n- Oncology specialty drugs with cold-chain management\n- Investigational drug protocol support\n- Sterile compounding for high-risk preparations\n- Medication therapy management (MTM) programs\n\n**3. Inventory & Technology**\n- Automated dispensing cabinet integration (Pyxis systems)\n- Real-time inventory management with 98% fill rate guarantee\n- Electronic prior authorization workflow\n- Controlled substance tracking (DEA compliance)\n- Barcoded unit-dose packaging for patient safety\n\n**Key Therapeutic Areas:**\n- Oncology: High-cost specialty drugs (Keytruda, Opdivo, CAR-T)\n- Cardiology: Anticoagulants, heart failure medications\n- Infectious Disease: Antibiotics including carbapenem-resistant coverage\n- Mental Health: Antipsychotics, mood stabilizers\n- Emergency Medicine: Code cart medications, procedural sedation\n\n**Performance Metrics Required:**\n- Fill rate: Minimum 98% (emergency drugs 100%)\n- Delivery timeliness: 95% on-time performance\n- Pricing accuracy: 99.5% billing accuracy\n- Clinical support: PharmD consultation within 30 minutes\n- Regulatory compliance: Zero 340B violations\n\n**Financial Terms:**\n- Net payment terms: Net 30 days\n- Volume rebates: Tiered based on annual spend\n- Group purchasing organization: Premier contract preferred\n- Inflation protection: CPI-based escalation caps\n- 340B ceiling price guarantee with quarterly true-ups\n\n**Compliance & Regulatory:**\n- 340B covered entity registration: Hospital #340B-12847\n- State pharmacy license requirements in 3 states\n- Joint Commission medication management standards\n- FDA track-and-trace compliance for serialized drugs\n- ISMP safety guidelines implementation\n\n**Implementation Timeline:**\n- Contract negotiation: January 15 - February 28\n- System integration testing: March 1-15\n- Staff training: March 15-25\n- Go-live: April 1, 2025\n- 90-day performance review: July 1, 2025\n\nWe need responses by January 22nd for evaluation. Please include:\n1. 340B program experience and compliance record\n2. Technology platform capabilities demonstration\n3. Clinical pharmacist support availability\n4. References from similar-sized 340B hospitals\n5. Detailed pricing proposal with 340B ceiling prices\n\nDr. Lisa Park, PharmD, BCPS\nChief Pharmacy Officer\nRegional Medical Center\nPhone: (555) 321-9876\nSecure: (555) 321-9877\nl.park@regionalmedical.org\n\nCC: CFO@regionalmedical.org, 340B-coordinator@regionalmedical.org",
       "expected_analysis": {
-        "intent": "Contract Renewal Request",
+        "intent": "Specialized Contract Renewal Request",
         "entities": {
-          "contract_type": "Pharmaceutical Supply Agreement",
-          "annual_spend": "$2.8M",
+          "contract_type": "340B Pharmaceutical Supply Agreement",
+          "annual_spend": "$4.2M total ($3.1M 340B eligible)",
           "expiration_date": "March 31st",
-          "key_requirements": "24/7 delivery, 340B pricing, cold chain, inventory tracking",
-          "meeting_deadline": "January 20th",
+          "savings_target": "$890K annually (28.7% off WAC)",
+          "covered_entities": "Main hospital + 3 off-site clinics",
+          "patient_population": "68% Medicaid, 22% uninsured",
+          "response_deadline": "January 22nd",
+          "implementation_date": "April 1, 2025",
+          "performance_requirements": "98% fill rate, 24/7 delivery",
+          "compliance_focus": "340B program, HRSA audit ready",
+          "specialty_areas": "Oncology, cardiology, infectious disease",
           "contact_phone": "(555) 321-9876",
           "contact_email": "l.park@regionalmedical.org"
         },
         "routing_tags": {
-          "department": "Pharmaceutical Sales",
+          "department": "340B Pharmaceutical Specialists",
           "priority": "High",
-          "contract_value": "Premium",
-          "compliance_required": "340B",
-          "renewal_timeline": "60 days"
+          "contract_value": "Premium ($4.2M annual)",
+          "compliance_required": "340B Program",
+          "specialty_handling": "Cold-chain, controlled substances",
+          "regulatory_complexity": "Multi-state, HRSA, DEA",
+          "renewal_timeline": "75 days",
+          "technology_integration": "Pyxis, EDI, real-time systems"
         },
-        "confidence": 0.95
+        "confidence": 0.98
       }
     }
   ],
@@ -259,21 +328,21 @@
       "name": "Manufacturing Monday",
       "description": "Process multiple manufacturing and industrial orders with increasing complexity",
       "emails": ["email_002", "email_005"],
-      "theme": "High-volume product orders and industrial projects with learning progression"
+      "theme": "High-volume product orders and industrial projects with technical specifications and compliance requirements"
     },
     {
       "id": "service_friday",
       "name": "Emergency Response Friday",
       "description": "Handle urgent service requests and emergency calls showing real-time response",
       "emails": ["email_001", "email_003"],
-      "theme": "Time-sensitive service requests requiring immediate response and escalation"
+      "theme": "Time-sensitive service requests requiring immediate response and escalation with patient/business impact"
     },
     {
       "id": "professional_services",
       "name": "Professional Services Deep Dive",
       "description": "Complex professional service inquiries and contract negotiations", 
       "emails": ["email_004", "email_006"],
-      "theme": "High-value professional services with regulatory compliance requirements"
+      "theme": "High-value professional services with regulatory compliance requirements and multi-jurisdictional complexity"
     },
     {
       "id": "complexity_showcase",
