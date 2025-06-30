@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Send, FileText, Target, Tag, Database, TrendingUp, Copy, Check, ExternalLink, Settings, Download, Clock, Users, Zap, Paperclip, Play, MessageCircle, Bot, User, ThumbsUp, Edit3 } from "lucide-react";
+import { Send, FileText, Target, Tag, Database, TrendingUp, Copy, Check, ExternalLink, Settings, Download, Clock, Users, Zap, Paperclip, Play, MessageCircle, Bot, User, ThumbsUp, Edit3, Brain, AlertTriangle } from "lucide-react";
 import sampleEmails from "../../data/sample_emails.json";
+import advancedScenariosData from "../../data/advanced_scenarios.json";
+import AdvancedEmailAnalyzer from "./AdvancedEmailAnalyzer";
 import { WorkflowState, ProcessedEmail, AnalysisResult, FeedbackUpdate } from "../types/workflow";
 
 interface EmailAnalyzerProps {
@@ -38,6 +40,7 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
   const [processingSteps, setProcessingSteps] = useState<ProcessingStep[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
   const [selectedAttachments, setSelectedAttachments] = useState<any[]>([]);
+  const [showAdvancedMode, setShowAdvancedMode] = useState(false);
 
   // Feedback System State
   const [showFeedbackChat, setShowFeedbackChat] = useState(false);
@@ -47,6 +50,20 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
   const [isAutoTyping, setIsAutoTyping] = useState(false);
   const [analysisUpdates, setAnalysisUpdates] = useState<FeedbackUpdate[]>([]);
   const [highlightedFields, setHighlightedFields] = useState<Set<string>>(new Set());
+
+  // Combine regular and advanced scenarios
+  const allScenarios = [
+    ...sampleEmails.demo_scenarios,
+    ...advancedScenariosData.complex_scenarios.map(scenario => ({
+      id: scenario.id,
+      name: scenario.name,
+      description: scenario.description,
+      emails: scenario.emails.map(email => email.id),
+      theme: `Advanced semantic analysis - ${scenario.difficulty} level`,
+      complexity_level: scenario.difficulty,
+      complexity_score: scenario.complexity_score
+    }))
+  ];
 
   const initializeProcessingSteps = () => {
     return [
@@ -102,12 +119,22 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
       setProcessingSteps(currentSteps);
     }
 
-    // Find matching sample email or create generic analysis
-    const matchingEmail = sampleEmails.emails.find(email => 
+    const totalProcessingTime = currentSteps.reduce((total, step) => total + step.time, 0);
+
+    // Find matching sample email (check both regular and advanced scenarios)
+    let matchingEmail = sampleEmails.emails.find(email => 
       emailContent.includes(email.content.substring(0, 50))
     );
 
-    const totalProcessingTime = currentSteps.reduce((total, step) => total + step.time, 0);
+    if (!matchingEmail) {
+      // Check advanced scenarios
+      for (const scenario of advancedScenariosData.complex_scenarios) {
+        matchingEmail = scenario.emails.find(email => 
+          emailContent.includes(email.content.substring(0, 50))
+        );
+        if (matchingEmail) break;
+      }
+    }
 
     let result: AnalysisResult;
     if (matchingEmail) {
@@ -221,21 +248,58 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
     setSelectedScenario(scenarioId);
     onBulkModeChange(true, scenarioId);
 
-    const scenario = sampleEmails.demo_scenarios.find(s => s.id === scenarioId);
+    const scenario = allScenarios.find(s => s.id === scenarioId);
     if (!scenario) return;
 
-    // Process each email in the scenario
-    for (const emailId of scenario.emails) {
-      const email = sampleEmails.emails.find(e => e.id === emailId);
-      if (email) {
-        setEmailContent(email.content);
-        setSelectedAttachments(email.attachments || []);
-        await handleAnalyze();
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Delay between emails
+    // For advanced scenarios, get the first email
+    if (scenarioId.startsWith('multi_product') || scenarioId.startsWith('emergency') || scenarioId.startsWith('international')) {
+      const advancedScenario = advancedScenariosData.complex_scenarios.find(s => s.id === scenarioId);
+      if (advancedScenario && advancedScenario.emails.length > 0) {
+        const firstEmail = advancedScenario.emails[0];
+        setEmailContent(firstEmail.content);
+        setSelectedAttachments(firstEmail.attachments || []);
+      }
+    } else {
+      // Regular scenario processing
+      for (const emailId of scenario.emails) {
+        const email = sampleEmails.emails.find(e => e.id === emailId);
+        if (email) {
+          setEmailContent(email.content);
+          setSelectedAttachments(email.attachments || []);
+          await handleAnalyze();
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
       }
     }
   };
 
+  const loadSampleEmail = (emailId: string) => {
+    let email = sampleEmails.emails.find(e => e.id === emailId);
+    
+    // If not found in regular emails, check advanced scenarios
+    if (!email) {
+      for (const scenario of advancedScenariosData.complex_scenarios) {
+        email = scenario.emails.find(e => e.id === emailId);
+        if (email) break;
+      }
+    }
+
+    if (email) {
+      setEmailContent(email.content);
+      setAnalysisResult(null);
+      setShowJsonOutput(false);
+      setSelectedAttachments(email.attachments || []);
+      setAnalysisUpdates([]);
+      setHighlightedFields(new Set());
+    }
+  };
+
+  const handleAdvancedScenarioComplete = (results: any) => {
+    console.log("Advanced scenario completed:", results);
+    // Handle advanced scenario completion
+  };
+
+  // Rest of the component methods remain the same...
   const startFeedbackChat = () => {
     setShowFeedbackChat(true);
     setChatMessages([
@@ -247,7 +311,6 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
       }
     ]);
 
-    // Auto-simulate user typing feedback
     setTimeout(() => {
       simulateAutoTyping();
     }, 1000);
@@ -334,7 +397,6 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
     const newResult = { ...analysisResult };
     const message = feedback.toLowerCase();
 
-    // Intent corrections
     if (message.includes("intent should be") || message.includes("should be classified as")) {
       const intentMatch = message.match(/intent should be ['"]?([^'".,!?]+)['"]?/i) || 
                          message.match(/should be classified as ['"]?([^'".,!?]+)['"]?/i);
@@ -355,7 +417,6 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
       }
     }
 
-    // Priority/routing corrections
     if (message.includes("priority should be") || message.includes("department should")) {
       if (message.includes("priority should be")) {
         const priorityMatch = message.match(/priority should be ['"]?([^'".,!?]+)['"]?/i);
@@ -412,18 +473,6 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
     response += `\n\nConfidence improved by ${Math.round(updates.reduce((sum, u) => sum + u.confidence_improvement, 0) * 100)}%. The analysis is now more accurate!`;
 
     return response;
-  };
-
-  const loadSampleEmail = (emailId: string) => {
-    const email = sampleEmails.emails.find(e => e.id === emailId);
-    if (email) {
-      setEmailContent(email.content);
-      setAnalysisResult(null);
-      setShowJsonOutput(false);
-      setSelectedAttachments(email.attachments || []);
-      setAnalysisUpdates([]);
-      setHighlightedFields(new Set());
-    }
   };
 
   const exportResults = () => {
@@ -491,77 +540,127 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Demo Scenarios */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <Play className="w-5 h-5 text-purple-600" />
-            <h3 className="text-lg font-semibold text-slate-900">Demo Scenarios</h3>
+      {/* Advanced Mode Toggle */}
+      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Brain className="w-6 h-6 text-purple-600" />
+            <div>
+              <h3 className="font-semibold text-purple-900">Advanced Semantic Analysis Mode</h3>
+              <p className="text-sm text-purple-700">Demonstrate complex multi-entity extraction and expert-level reasoning</p>
+            </div>
           </div>
-          <div className="text-sm text-slate-600">
-            Pre-configured industry workflows with bulk processing
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {sampleEmails.demo_scenarios.map((scenario) => (
-            <button
-              key={scenario.id}
-              onClick={() => handleBulkScenarioRun(scenario.id)}
-              className={`text-left p-4 border rounded-lg transition-colors ${
-                selectedScenario === scenario.id
-                  ? "border-purple-300 bg-purple-50"
-                  : "border-slate-200 hover:border-purple-300 hover:bg-purple-50"
-              }`}
-            >
-              <div className="font-medium text-slate-900 mb-1">{scenario.name}</div>
-              <div className="text-sm text-slate-600 mb-2">{scenario.description}</div>
-              <div className="text-xs text-purple-600 font-medium">
-                {scenario.emails.length} emails • Bulk processing demo
-              </div>
-            </button>
-          ))}
+          <button
+            onClick={() => setShowAdvancedMode(!showAdvancedMode)}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              showAdvancedMode 
+                ? 'bg-purple-600 text-white'
+                : 'bg-white text-purple-600 border border-purple-300 hover:bg-purple-50'
+            }`}
+          >
+            {showAdvancedMode ? 'Exit Advanced Mode' : 'Enter Advanced Mode'}
+          </button>
         </div>
       </div>
 
-      {/* Sample Email Loader */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6" id="sample-emails">
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Start - Load Sample Email</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sampleEmails.emails.map((email) => (
-            <button
-              key={email.id}
-              onClick={() => loadSampleEmail(email.id)}
-              className="text-left p-4 border border-slate-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="font-medium text-slate-900">{email.company}</div>
-                <div className={`px-2 py-1 rounded text-xs font-medium ${
-                  email.industry === "Construction" ? "bg-orange-100 text-orange-800" :
-                  email.industry === "Healthcare" ? "bg-red-100 text-red-800" :
-                  email.industry === "Legal" ? "bg-purple-100 text-purple-800" :
-                  "bg-blue-100 text-blue-800"
-                }`}>
-                  {email.industry}
-                </div>
+      {/* Advanced Mode Panel */}
+      {showAdvancedMode && (
+        <AdvancedEmailAnalyzer onScenarioComplete={handleAdvancedScenarioComplete} />
+      )}
+
+      {/* Regular Demo Scenarios */}
+      {!showAdvancedMode && (
+        <>
+          {/* Demo Scenarios */}
+          <div className="bg-white rounded-xl border border-slate-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-2">
+                <Play className="w-5 h-5 text-purple-600" />
+                <h3 className="text-lg font-semibold text-slate-900">Demo Scenarios</h3>
               </div>
-              <div className="text-sm text-slate-600 mb-2">{email.subject}</div>
-              <div className="flex items-center justify-between">
-                <div className="text-xs text-blue-600 font-medium">
-                  Intent: {email.expected_analysis.intent}
-                </div>
-                {email.attachments && email.attachments.length > 0 && (
-                  <div className="flex items-center space-x-1 text-xs text-slate-500">
-                    <Paperclip className="w-3 h-3" />
-                    <span>{email.attachments.length}</span>
+              <div className="text-sm text-slate-600">
+                Pre-configured industry workflows with semantic complexity
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {allScenarios.map((scenario) => (
+                <button
+                  key={scenario.id}
+                  onClick={() => handleBulkScenarioRun(scenario.id)}
+                  className={`text-left p-4 border-2 rounded-lg transition-colors ${
+                    selectedScenario === scenario.id
+                      ? "border-purple-300 bg-purple-50"
+                      : "border-slate-200 hover:border-purple-300 hover:bg-purple-50"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="font-medium text-slate-900">{scenario.name}</div>
+                    {scenario.complexity_level && (
+                      <div className={`px-2 py-1 rounded text-xs font-medium ${
+                        scenario.complexity_level === 'Expert' ? 'bg-red-100 text-red-800' :
+                        scenario.complexity_level === 'Advanced' ? 'bg-orange-100 text-orange-800' :
+                        'bg-blue-100 text-blue-800'
+                      }`}>
+                        {scenario.complexity_level}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
+                  <div className="text-sm text-slate-600 mb-2">{scenario.description}</div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-purple-600">
+                      {scenario.emails.length} emails
+                      {scenario.complexity_score && ` • ${scenario.complexity_score}/10 complexity`}
+                    </span>
+                    {scenario.theme.includes('Advanced') && (
+                      <AlertTriangle className="w-4 h-4 text-orange-500" />
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
 
-      {/* Email Input */}
+          {/* Sample Email Loader */}
+          <div className="bg-white rounded-xl border border-slate-200 p-6" id="sample-emails">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Start - Load Sample Email</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sampleEmails.emails.map((email) => (
+                <button
+                  key={email.id}
+                  onClick={() => loadSampleEmail(email.id)}
+                  className="text-left p-4 border border-slate-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="font-medium text-slate-900">{email.company}</div>
+                    <div className={`px-2 py-1 rounded text-xs font-medium ${
+                      email.industry === "Construction" ? "bg-orange-100 text-orange-800" :
+                      email.industry === "Healthcare" ? "bg-red-100 text-red-800" :
+                      email.industry === "Legal" ? "bg-purple-100 text-purple-800" :
+                      "bg-blue-100 text-blue-800"
+                    }`}>
+                      {email.industry}
+                    </div>
+                  </div>
+                  <div className="text-sm text-slate-600 mb-2">{email.subject}</div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-xs text-blue-600 font-medium">
+                      Intent: {email.expected_analysis.intent}
+                    </div>
+                    {email.attachments && email.attachments.length > 0 && (
+                      <div className="flex items-center space-x-1 text-xs text-slate-500">
+                        <Paperclip className="w-3 h-3" />
+                        <span>{email.attachments.length}</span>
+                      </div>
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Email Input - Always show regardless of mode */}
       <div className="bg-white rounded-xl border border-slate-200 p-6" id="email-input">
         <div className="flex items-center space-x-2 mb-4">
           <FileText className="w-5 h-5 text-blue-600" />
@@ -600,6 +699,7 @@ const EmailAnalyzer: React.FC<EmailAnalyzerProps> = ({
         />
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center space-x-4">
+            
             <div className="text-sm text-slate-500">
               {emailContent.length} characters
             </div>
