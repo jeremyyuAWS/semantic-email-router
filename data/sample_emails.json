@@ -17,30 +17,40 @@
       ],
       "content": "Hi there,\n\nI need a quote for debris pickup from our downtown job site ASAP. We've got 5 dumpsters worth of concrete demolition debris that needs to be cleared by Friday or we'll face penalties from the city.\n\nThe site is at 123 Main Street downtown - it's a tight space with limited truck access between 8 AM and 4 PM only due to traffic restrictions. We'll need roll-off containers, not standard dumpsters.\n\nThis is a union job so prevailing wage rates apply. The debris includes some rebar mixed in with the concrete - is that extra cost for sorting?\n\nPlease let me know pricing and confirm you can meet the Friday deadline. The general contractor is breathing down my neck on this one.\n\nThanks,\nMike Johnson\nSite Supervisor\nTiny's Demolition Services\n(555) 123-4567\nmjohnson@tinysdemolition.com",
       "expected_analysis": {
-        "intent": "Emergency Service Request",
+        "intent": "Emergency Service Quote Request",
         "entities": {
-          "service": "Debris Pickup",
-          "quantity": "5 dumpsters worth",
+          "service_type": "Debris pickup",
           "material_type": "Concrete demolition debris with rebar",
+          "quantity": "5 dumpsters worth",
           "location": "123 Main Street downtown",
-          "due_date": "Friday",
-          "access_restrictions": "8 AM - 4 PM only, tight space",
-          "special_requirements": "Roll-off containers, prevailing wage, rebar sorting",
-          "contact_phone": "(555) 123-4567",
-          "contact_email": "mjohnson@tinysdemolition.com",
-          "urgency_indicators": "ASAP, penalties, breathing down neck"
+          "deadline": "Friday",
+          "access_restrictions": "8 AM - 4 PM only, tight space, limited truck access",
+          "special_requirements": "Roll-off containers, prevailing wage rates, rebar sorting",
+          "contact_info": {
+            "name": "Mike Johnson",
+            "title": "Site Supervisor", 
+            "phone": "(555) 123-4567",
+            "email": "mjohnson@tinysdemolition.com"
+          },
+          "urgency_indicators": ["ASAP", "penalties from the city", "breathing down my neck"]
         },
         "routing_tags": {
           "department": "Emergency Operations",
           "priority": "High",
           "urgency": "Critical - Friday deadline",
           "service_line": "Commercial Waste Management",
-          "matched_service_code": "DPK-05-EMRG",
+          "special_handling": ["Prevailing wage", "Rebar separation", "Downtown access permits"],
           "requires_site_visit": true,
-          "special_handling": "Prevailing wage, rebar separation",
-          "access_constraints": "Limited downtown access"
+          "escalation_needed": true
         },
-        "confidence": 0.96
+        "knowledge_base_match": {
+          "source": "Service_Catalog_2025.xlsx",
+          "row": 88,
+          "content": "DPK-05: Five 20-yard dumpsters with pickup service - $2,850 base price, 24-48 hour response time",
+          "confidence": 0.91,
+          "notes": "Exact quantity match, but emergency timeline and downtown location may require premium pricing"
+        },
+        "confidence": 0.94
       }
     },
     {
@@ -68,30 +78,44 @@
       "expected_analysis": {
         "intent": "Urgent Product Order Request",
         "entities": {
-          "product": "316L stainless steel pipe",
-          "specifications": "2.5\" OD, 20-ft length, Schedule 80, #4 brushed finish",
-          "quantity": "75 pieces (1,500 total feet)",
           "material_grade": "316L stainless steel (NOT 304)",
           "application": "Food processing - dairy facility",
-          "compliance_required": "FDA 21 CFR 177.2600, ASTM A967",
-          "certifications": "Mill test certificates for each heat lot",
+          "specifications": {
+            "outside_diameter": "2.5 inches",
+            "length": "20-foot sections", 
+            "wall_thickness": "Schedule 80",
+            "surface_finish": "#4 brushed, passivated per ASTM A967"
+          },
+          "quantity": "75 pieces (1,500 total feet)",
+          "certifications_required": ["Mill test certificates for each heat lot", "FDA 21 CFR 177.2600 compliance"],
           "deadline": "Next Friday",
-          "business_impact": "$15K per day loss",
-          "contact_phone": "(555) 987-6543",
-          "contact_email": "s.chen@chenmanufacturing.com",
-          "urgency_indicators": "urgent, down since Monday, losing money"
+          "business_impact": "$15K per day loss since Monday",
+          "contact_info": {
+            "name": "Sarah Chen, P.E.",
+            "title": "Senior Process Engineer",
+            "company": "Chen Manufacturing",
+            "phone": "(555) 987-6543",
+            "email": "s.chen@chenmanufacturing.com"
+          },
+          "critical_requirements": ["316L grade verification", "Expedited shipping", "FDA compliance documentation"]
         },
         "routing_tags": {
-          "department": "Stainless Steel Sales",
+          "department": "Stainless Steel Sales - Food Grade",
           "priority": "Critical",
           "product_line": "Food Grade Pipe & Tubing",
-          "matched_catalog_sku": "PIP-316L-2.5OD-SCH80",
-          "requires_quote": true,
-          "compliance_review": true,
+          "compliance_review": ["FDA", "ASTM A967"],
           "expedited_processing": true,
-          "material_verification": "316L grade confirmation required"
+          "material_verification": "316L grade confirmation required",
+          "escalation": "Engineering review for food grade compliance"
         },
-        "confidence": 0.98
+        "knowledge_base_match": {
+          "source": "Penn_2025_Product_Catalog.xlsx",
+          "row": 298,
+          "content": "PIP-316-2.5OD-SCH80: 316 SS Pipe 2.5\" OD Schedule 80 - $45.25/ft, Limited stock, 5-7 day lead time",
+          "confidence": 0.96,
+          "notes": "Exact specification match, but 316L grade and FDA compliance need verification"
+        },
+        "confidence": 0.97
       }
     },
     {
@@ -119,18 +143,44 @@
       "expected_analysis": {
         "intent": "Critical Medical Equipment Emergency",
         "entities": {
-          "equipment": "Siemens Magnetom Vida MRI Unit #3",
-          "serial_number": "SMV-2019-0847",
-          "primary_error": "E-2847 - Gradient coil temperature critical",
-          "secondary_errors": "E-2851, E-2863 - cooling system",
-          "location": "Cardiac Imaging Department",
-          "patient_impact": "12 studies cancelled, 3 emergencies postponed",
-          "urgency": "IMMEDIATE - patient safety critical",
-          "required_technician": "Level 3 certified biomedical engineer",
-          "likely_repair": "Gradient coil temperature sensor replacement",
-          "contact_phone": "(555) 234-7890",
-          "emergency_phone": "(555) 234-7800",
-          "contact_email": "p.martinez@stmarys.health"
+          "equipment_details": {
+            "type": "MRI Unit",
+            "model": "Siemens Magnetom Vida",
+            "serial_number": "SMV-2019-0847",
+            "location": "Cardiac Imaging Department",
+            "unit_number": "#3"
+          },
+          "failure_details": {
+            "primary_error": "E-2847 - Gradient coil temperature critical alarm",
+            "secondary_errors": ["E-2851", "E-2863 - cooling system failures"],
+            "failure_time": "2:15 AM",
+            "likely_cause": "Gradient coil temperature sensor"
+          },
+          "patient_impact": {
+            "total_affected": "12 cardiac imaging studies",
+            "emergency_procedures": "3 cardiac catheterization postponed",
+            "time_critical": "2 stroke protocol imaging delays",
+            "routine_studies": "7 cardiac MRI rescheduled",
+            "estimated_delay": "4-6 hours minimum"
+          },
+          "service_requirements": {
+            "technician_level": "Level 3 certified biomedical technician",
+            "parts_needed": "Gradient coil temperature sensor",
+            "diagnostic_needed": "Cooling system repair",
+            "response_time": "IMMEDIATE - patient safety critical"
+          },
+          "contact_info": {
+            "name": "Dr. Patricia Martinez, MD",
+            "title": "Chief of Cardiology",
+            "direct": "(555) 234-7890",
+            "emergency": "(555) 234-7800",
+            "email": "p.martinez@stmarys.health",
+            "onsite_contact": "Biomedical Engineering (ext. 5847)"
+          },
+          "service_history": {
+            "last_service": "September 15, 2024",
+            "warranty_status": "Active service contract through Siemens"
+          }
         },
         "routing_tags": {
           "department": "Emergency Biomedical Services",
@@ -139,9 +189,16 @@
           "service_type": "Emergency Repair",
           "escalation_required": true,
           "patient_safety_impact": true,
-          "equipment_type": "MRI",
-          "manufacturer": "Siemens",
-          "warranty_status": "Active"
+          "equipment_manufacturer": "Siemens",
+          "warranty_coverage": "Active contract",
+          "required_expertise": ["Level 3 biomedical", "MRI specialist", "Gradient coil systems"]
+        },
+        "knowledge_base_match": {
+          "source": "Medical_Equipment_Database.xlsx",
+          "row": 847,
+          "content": "Siemens Magnetom Vida MRI-SIE-VIDA: E-2847 indicates gradient coil temperature warning, 2-hour critical response time, 24/7 emergency stock available",
+          "confidence": 0.98,
+          "notes": "Exact error code match with response protocol and parts availability"
         },
         "confidence": 0.99
       }
@@ -177,30 +234,64 @@
       "expected_analysis": {
         "intent": "Complex Legal Services Request",
         "entities": {
-          "service_type": "International supply agreement review",
-          "transaction_value": "$847M over 7 years",
-          "parties": "US manufacturer, Swiss licensor, EU distributors", 
-          "regulatory_scope": "FDA, CE Mark, UK, Canada, Japan",
-          "ip_complexity": "23 patent families across 15 jurisdictions",
-          "deadline": "January 25th board approval",
-          "budget_range": "$85,000 - $120,000",
-          "estimated_hours": "180-220 billable hours",
-          "business_impact": "15% of annual revenue",
-          "required_expertise": "International M&A, Regulatory, IP counsel",
-          "contact_phone": "(555) 456-7890",
-          "contact_email": "j.morrison@morrisonlaw.com"
+          "transaction_details": {
+            "type": "International supply agreement",
+            "parties": ["US manufacturer", "Swiss licensor", "EU distributors"],
+            "industry": "Medical device components",
+            "regulatory_scope": "FDA Class II, CE Mark, MDSAP",
+            "deal_value": "$847M over 7 years with milestones",
+            "jurisdictions": ["US", "EU", "UK", "Canada", "Japan"]
+          },
+          "legal_complexity": {
+            "ip_families": "23 patent families across 15 jurisdictions",
+            "regulatory_programs": ["FDA 510(k)", "CE marking", "MDSAP", "PMDA consultation"],
+            "compliance_areas": ["ITAR", "EAR", "EU dual-use export controls"],
+            "commercial_terms": ["Force majeure", "Currency hedging", "International arbitration"]
+          },
+          "timeline_constraints": {
+            "board_approval": "January 25th (firm deadline)", 
+            "regulatory_submissions": "Q2 2025",
+            "commercial_production": "Q4 2025",
+            "available_period": "January 16-25"
+          },
+          "budget_scope": {
+            "approved_range": "$85,000 - $120,000",
+            "estimated_hours": "180-220 billable hours",
+            "revenue_impact": "15% of annual revenue"
+          },
+          "expertise_required": {
+            "senior_partner": "International M&A experience",
+            "regulatory_specialist": "Medical device expertise", 
+            "ip_counsel": "Patent prosecution background"
+          },
+          "contact_info": {
+            "name": "James Morrison, Esq.",
+            "title": "Senior Partner & Managing Director",
+            "company": "Morrison & Associates",
+            "direct": "(555) 456-7890",
+            "cell": "(555) 456-7891",
+            "email": "j.morrison@morrisonlaw.com"
+          }
         },
         "routing_tags": {
           "department": "International Corporate Law",
-          "priority": "Critical",
-          "expertise_required": "Senior Partner + Regulatory + IP",
+          "priority": "Critical", 
+          "expertise_required": ["Senior Partner", "Regulatory Specialist", "IP Counsel"],
           "service_type": "Complex Transaction Review",
           "budget_tier": "Premium ($85K-120K)",
-          "escalation": "Managing Partner approval",
-          "regulatory_flags": "FDA, ITAR, Multi-jurisdiction",
-          "timeline": "9-day deadline"
+          "escalation": "Managing Partner approval required",
+          "regulatory_complexity": ["FDA", "ITAR", "Multi-jurisdiction"],
+          "timeline": "9-day critical deadline",
+          "revenue_critical": true
         },
-        "confidence": 0.97
+        "knowledge_base_match": {
+          "source": "Legal_Services_Rate_Card.pdf",
+          "row": 7,
+          "content": "Complex contract analysis: $850/hour Senior Partner, 40-60 hours typical for multi-party agreements, international compliance adds 25% premium",
+          "confidence": 0.93,
+          "notes": "Complex international transaction matches premium service tier with regulatory expertise requirements"
+        },
+        "confidence": 0.96
       }
     },
     {
@@ -232,35 +323,72 @@
       ],
       "content": "Hello,\n\nWe're seeking qualified mechanical contractors for HVAC installation on a municipal building project. This is a prevailing wage job with strict union requirements.\n\n**Project Details:**\n- New 67,500 sq ft municipal services building\n- 12 rooftop units (7.5-ton capacity each)\n- Complete ductwork installation throughout 4 floors\n- VAV boxes with DDC controls integration\n- Energy recovery ventilation system\n- Building automation system tie-in\n\n**Critical Requirements:**\n- MUST be licensed mechanical contractor (state license verification)\n- Union shop with Local 157 jurisdiction agreement\n- Prevailing wage rates apply (see attached schedule)\n- Certified welders for all refrigerant line work\n- NEBB certification for testing, adjusting, balancing\n\n**Project Timeline:**\n- Award Date: February 15, 2025\n- Mobilization: March 1, 2025\n- Substantial Completion: June 30, 2025\n- Final Completion: July 15, 2025\n- Liquidated Damages: $2,500/day for late completion\n\n**Location & Logistics:**\n- 1247 Commerce Drive, Municipal Complex\n- Secure site - background checks required for all workers\n- Material deliveries: 6 AM - 3 PM weekdays only\n- Noise restrictions: No impact work before 7 AM\n- Parking extremely limited - coordinate with site superintendent\n\n**Bid Requirements:**\n- Bid bond: 5% of bid amount\n- Performance & payment bonds: 100% of contract value\n- Insurance: $2M general liability, $1M auto, workers comp\n- Three municipal project references (last 5 years)\n- Union agreement documentation\n- Licensed contractor certificate (current)\n\n**Key Specifications:**\n- HVAC equipment: Energy Star rated, minimum 16 SEER\n- Ductwork: Galvanized steel, sealed per SMACNA standards\n- Controls: BACnet compatible, web-based interface\n- Commissioning: Full system commissioning by certified agent\n\nBid deadline: January 30, 2025 at 2:00 PM\nMandatory pre-bid meeting: January 22, 2025 at 10:00 AM on-site\n\nEstimated contract value: $850,000 - $1,200,000\n\nPlease confirm:\n1. Union Local 157 agreement status\n2. Municipal project experience\n3. Licensed contractor verification\n4. Bonding capacity availability\n\nContact for site visit coordination:\nCarlos Rodriguez\nProject Manager\nBlue Ridge Construction\n(555) 789-0123\nc.rodriguez@blueridgeconstruction.com",
       "expected_analysis": {
-        "intent": "Municipal Contract Bid Request",
+        "intent": "Municipal Contract Bid Opportunity",
         "entities": {
-          "project_type": "HVAC installation - municipal building",
-          "building_size": "67,500 sq ft, 4 floors",
-          "equipment": "12 rooftop units (7.5-ton each), VAV boxes, ERV",
-          "contract_value": "$850,000 - $1,200,000",
-          "timeline": "March 1 - July 15, 2025",
-          "location": "1247 Commerce Drive, Municipal Complex",
-          "bid_deadline": "January 30, 2025 at 2:00 PM",
-          "pre_bid_meeting": "January 22, 2025 at 10:00 AM",
-          "liquidated_damages": "$2,500/day",
-          "union_requirement": "Local 157 jurisdiction",
-          "licensing": "State licensed mechanical contractor",
-          "bonding": "5% bid bond, 100% performance/payment",
-          "contact_phone": "(555) 789-0123",
-          "contact_email": "c.rodriguez@blueridgeconstruction.com"
+          "project_scope": {
+            "building_type": "Municipal services building",
+            "size": "67,500 sq ft, 4 floors",
+            "hvac_equipment": "12 rooftop units (7.5-ton each)",
+            "systems": ["VAV boxes", "DDC controls", "Energy recovery ventilation", "Building automation"]
+          },
+          "contract_details": {
+            "estimated_value": "$850,000 - $1,200,000",
+            "timeline": "March 1 - July 15, 2025",
+            "liquidated_damages": "$2,500/day for delays"
+          },
+          "requirements": {
+            "licensing": "State licensed mechanical contractor",
+            "union": "Local 157 jurisdiction agreement", 
+            "wage_type": "Prevailing wage rates",
+            "certifications": ["Certified welders", "NEBB certification"],
+            "bonding": "5% bid bond, 100% performance/payment bonds",
+            "insurance": "$2M general liability, $1M auto, workers comp"
+          },
+          "bid_process": {
+            "deadline": "January 30, 2025 at 2:00 PM",
+            "pre_bid_meeting": "January 22, 2025 at 10:00 AM on-site",
+            "location": "1247 Commerce Drive, Municipal Complex"
+          },
+          "site_constraints": {
+            "security": "Background checks required",
+            "delivery_hours": "6 AM - 3 PM weekdays only",
+            "noise_restrictions": "No impact work before 7 AM",
+            "parking": "Extremely limited"
+          },
+          "technical_specs": {
+            "equipment_standards": "Energy Star rated, minimum 16 SEER",
+            "ductwork": "Galvanized steel, SMACNA standards",
+            "controls": "BACnet compatible, web-based",
+            "commissioning": "Full system commissioning required"
+          },
+          "contact_info": {
+            "name": "Carlos Rodriguez",
+            "title": "Project Manager", 
+            "company": "Blue Ridge Construction",
+            "phone": "(555) 789-0123",
+            "email": "c.rodriguez@blueridgeconstruction.com"
+          }
         },
         "routing_tags": {
           "department": "Municipal Projects Division",
           "priority": "High",
           "project_type": "Public Works - Prevailing Wage",
-          "requires_license": true,
-          "union_required": true,
+          "licensing_required": true,
+          "union_required": "Local 157",
           "bonding_required": true,
           "security_clearance": "Background checks required",
           "bid_opportunity": true,
-          "contract_tier": "Large ($850K-$1.2M)"
+          "contract_tier": "Large ($850K-$1.2M)",
+          "specializations": ["Municipal HVAC", "Union shop", "Public sector"]
         },
-        "confidence": 0.95
+        "knowledge_base_match": {
+          "source": "Service_Catalog_2025.xlsx",
+          "row": 201,
+          "content": "HVAC-INST: Commercial HVAC Installation $85,000-$150,000, license required, 5-year warranty",
+          "confidence": 0.87,
+          "notes": "Base service matches but municipal scale and prevailing wage requirements significantly increase scope and value"
+        },
+        "confidence": 0.94
       }
     },
     {
@@ -292,33 +420,70 @@
       ],
       "content": "Dear Procurement Partners,\n\nWe need to renew our pharmaceutical supply agreement before the current contract expires March 31st. Our 340B-qualified hospital requires specialized pricing and compliance management.\n\n**Contract Overview:**\n- Annual pharmaceutical spend: $4.2M (340B eligible: $3.1M)\n- Covered entities: Main hospital + 3 off-site clinics\n- Patient population: 68% Medicaid, 22% uninsured, 10% commercial\n- 340B savings target: $890K annually (28.7% off WAC)\n\n**Critical Requirements:**\n\n**1. 340B Program Compliance**\n- Real-time duplicate discount prevention\n- Automated split-billing for eligible/ineligible patients\n- Quarterly compliance reporting (HRSA audit ready)\n- Contract pharmacy management (CVS, Walgreens arrangements)\n- Medicaid carve-out state compliance (varies by state)\n\n**2. Clinical Pharmacy Services**\n- 24/7 emergency drug delivery (within 2 hours)\n- Oncology specialty drugs with cold-chain management\n- Investigational drug protocol support\n- Sterile compounding for high-risk preparations\n- Medication therapy management (MTM) programs\n\n**3. Inventory & Technology**\n- Automated dispensing cabinet integration (Pyxis systems)\n- Real-time inventory management with 98% fill rate guarantee\n- Electronic prior authorization workflow\n- Controlled substance tracking (DEA compliance)\n- Barcoded unit-dose packaging for patient safety\n\n**Key Therapeutic Areas:**\n- Oncology: High-cost specialty drugs (Keytruda, Opdivo, CAR-T)\n- Cardiology: Anticoagulants, heart failure medications\n- Infectious Disease: Antibiotics including carbapenem-resistant coverage\n- Mental Health: Antipsychotics, mood stabilizers\n- Emergency Medicine: Code cart medications, procedural sedation\n\n**Performance Metrics Required:**\n- Fill rate: Minimum 98% (emergency drugs 100%)\n- Delivery timeliness: 95% on-time performance\n- Pricing accuracy: 99.5% billing accuracy\n- Clinical support: PharmD consultation within 30 minutes\n- Regulatory compliance: Zero 340B violations\n\n**Financial Terms:**\n- Net payment terms: Net 30 days\n- Volume rebates: Tiered based on annual spend\n- Group purchasing organization: Premier contract preferred\n- Inflation protection: CPI-based escalation caps\n- 340B ceiling price guarantee with quarterly true-ups\n\n**Compliance & Regulatory:**\n- 340B covered entity registration: Hospital #340B-12847\n- State pharmacy license requirements in 3 states\n- Joint Commission medication management standards\n- FDA track-and-trace compliance for serialized drugs\n- ISMP safety guidelines implementation\n\n**Implementation Timeline:**\n- Contract negotiation: January 15 - February 28\n- System integration testing: March 1-15\n- Staff training: March 15-25\n- Go-live: April 1, 2025\n- 90-day performance review: July 1, 2025\n\nWe need responses by January 22nd for evaluation. Please include:\n1. 340B program experience and compliance record\n2. Technology platform capabilities demonstration\n3. Clinical pharmacist support availability\n4. References from similar-sized 340B hospitals\n5. Detailed pricing proposal with 340B ceiling prices\n\nDr. Lisa Park, PharmD, BCPS\nChief Pharmacy Officer\nRegional Medical Center\nPhone: (555) 321-9876\nSecure: (555) 321-9877\nl.park@regionalmedical.org\n\nCC: CFO@regionalmedical.org, 340B-coordinator@regionalmedical.org",
       "expected_analysis": {
-        "intent": "Specialized Contract Renewal Request",
+        "intent": "Specialized Pharmaceutical Contract Renewal",
         "entities": {
-          "contract_type": "340B Pharmaceutical Supply Agreement",
-          "annual_spend": "$4.2M total ($3.1M 340B eligible)",
-          "expiration_date": "March 31st",
-          "savings_target": "$890K annually (28.7% off WAC)",
-          "covered_entities": "Main hospital + 3 off-site clinics",
-          "patient_population": "68% Medicaid, 22% uninsured",
-          "response_deadline": "January 22nd",
-          "implementation_date": "April 1, 2025",
-          "performance_requirements": "98% fill rate, 24/7 delivery",
-          "compliance_focus": "340B program, HRSA audit ready",
-          "specialty_areas": "Oncology, cardiology, infectious disease",
-          "contact_phone": "(555) 321-9876",
-          "contact_email": "l.park@regionalmedical.org"
+          "contract_details": {
+            "type": "340B Pharmaceutical Supply Agreement",
+            "current_expires": "March 31st",
+            "annual_spend": "$4.2M total ($3.1M 340B eligible)",
+            "savings_target": "$890K annually (28.7% off WAC)"
+          },
+          "organizational_scope": {
+            "covered_entities": "Main hospital + 3 off-site clinics",
+            "patient_demographics": "68% Medicaid, 22% uninsured, 10% commercial",
+            "entity_registration": "Hospital #340B-12847"
+          },
+          "compliance_requirements": {
+            "340b_specific": ["Duplicate discount prevention", "Split-billing automation", "HRSA audit ready", "Contract pharmacy management"],
+            "regulatory": ["DEA compliance", "FDA track-and-trace", "Joint Commission standards", "ISMP guidelines"],
+            "state_licensing": "3 states"
+          },
+          "service_requirements": {
+            "delivery": "24/7 emergency (within 2 hours)",
+            "specialty_handling": ["Cold-chain management", "Sterile compounding", "Controlled substances"],
+            "technology": ["Pyxis integration", "Real-time inventory", "Electronic prior auth"],
+            "clinical_support": "PharmD consultation within 30 minutes"
+          },
+          "performance_metrics": {
+            "fill_rate": "98% minimum (100% emergency)",
+            "delivery_performance": "95% on-time",
+            "pricing_accuracy": "99.5%",
+            "compliance_target": "Zero 340B violations"
+          },
+          "therapeutic_areas": ["Oncology specialty drugs", "Cardiology", "Infectious Disease", "Mental Health", "Emergency Medicine"],
+          "timeline": {
+            "response_deadline": "January 22nd",
+            "contract_negotiation": "January 15 - February 28",
+            "go_live": "April 1, 2025",
+            "performance_review": "July 1, 2025"
+          },
+          "contact_info": {
+            "name": "Dr. Lisa Park, PharmD, BCPS",
+            "title": "Chief Pharmacy Officer",
+            "phone": "(555) 321-9876",
+            "secure": "(555) 321-9877",
+            "email": "l.park@regionalmedical.org"
+          }
         },
         "routing_tags": {
           "department": "340B Pharmaceutical Specialists",
           "priority": "High",
           "contract_value": "Premium ($4.2M annual)",
           "compliance_required": "340B Program",
-          "specialty_handling": "Cold-chain, controlled substances",
-          "regulatory_complexity": "Multi-state, HRSA, DEA",
+          "specialty_handling": ["Cold-chain", "Controlled substances", "Oncology"],
+          "regulatory_complexity": ["Multi-state", "HRSA", "DEA", "FDA"],
           "renewal_timeline": "75 days",
-          "technology_integration": "Pyxis, EDI, real-time systems"
+          "technology_integration": ["Pyxis", "Real-time systems", "EDI"],
+          "clinical_specialization": "Hospital pharmacy"
         },
-        "confidence": 0.98
+        "knowledge_base_match": {
+          "source": "Pharmaceutical_Formulary_2025.xlsx",
+          "row": 2156,
+          "content": "Pembrolizumab (Keytruda) Oncology: 340B price $4,567.89, requires refrigerated storage and specialty protocols",
+          "confidence": 0.92,
+          "notes": "Exact 340B pricing model match with specialty drug handling requirements and compliance protocols"
+        },
+        "confidence": 0.97
       }
     }
   ],
@@ -343,72 +508,6 @@
       "description": "Complex professional service inquiries and contract negotiations", 
       "emails": ["email_004", "email_006"],
       "theme": "High-value professional services with regulatory compliance requirements and multi-jurisdictional complexity"
-    },
-    {
-      "id": "complexity_showcase",
-      "name": "Advanced Semantic Search Showcase",
-      "description": "Demonstrate advanced semantic understanding with multi-entity extraction and complex reasoning",
-      "emails": ["complex_email_001", "complex_email_002", "complex_email_003"],
-      "theme": "Expert-level semantic analysis with cross-domain knowledge integration",
-      "complexity_level": "Expert",
-      "learning_objectives": [
-        "Multi-entity extraction and cross-referencing",
-        "Technical specification understanding",
-        "Regulatory compliance identification",
-        "Emergency prioritization and escalation",
-        "Budget and timeline constraint recognition",
-        "Risk assessment and mitigation planning"
-      ]
-    },
-    {
-      "id": "cross_industry_intelligence",
-      "name": "Cross-Industry Intelligence Demo",
-      "description": "Show how the system learns patterns across industries and applies knowledge transfer",
-      "emails": ["email_001", "complex_email_002", "email_004", "complex_email_001"],
-      "theme": "Demonstrating cross-industry pattern recognition and knowledge transfer",
-      "complexity_level": "Advanced",
-      "learning_objectives": [
-        "Pattern recognition across industries",
-        "Terminology learning and application",
-        "Urgency classification consistency",
-        "Vendor specialization identification",
-        "Compliance requirement mapping"
-      ]
     }
-  ],
-  "advanced_features": {
-    "semantic_search_demonstrations": [
-      {
-        "feature": "Multi-Entity Cross-Referencing",
-        "description": "Demonstrate how the system connects related entities across complex specifications",
-        "example_email": "complex_email_001",
-        "showcase": "316L stainless steel + pharmaceutical grade + ASTM standards + delivery phases"
-      },
-      {
-        "feature": "Cascade Failure Analysis", 
-        "description": "Show intelligent root cause analysis across interconnected system failures",
-        "example_email": "complex_email_002",
-        "showcase": "Equipment error code patterns + patient impact + regulatory notifications"
-      },
-      {
-        "feature": "Regulatory Harmonization",
-        "description": "Demonstrate understanding of multi-jurisdiction compliance requirements",
-        "example_email": "complex_email_003", 
-        "showcase": "International IP law + cross-border data privacy + regulatory pathways"
-      },
-      {
-        "feature": "Temporal Constraint Optimization",
-        "description": "Show how the system understands and prioritizes time-critical dependencies",
-        "example_email": "complex_email_001",
-        "showcase": "Phased delivery schedules + penalty clauses + critical path analysis"
-      }
-    ],
-    "learning_progression_metrics": {
-      "confidence_improvement": "Track confidence score increases through feedback iterations",
-      "entity_extraction_accuracy": "Monitor precision and recall of entity identification",
-      "cross_domain_transfer": "Measure knowledge application across different industries",
-      "response_time_optimization": "Track processing speed improvements over time",
-      "escalation_accuracy": "Monitor correct identification of high-priority scenarios"
-    }
-  }
+  ]
 }
