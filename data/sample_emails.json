@@ -257,23 +257,89 @@
     {
       "id": "manufacturing_monday",
       "name": "Manufacturing Monday",
-      "description": "Process multiple manufacturing and industrial orders",
+      "description": "Process multiple manufacturing and industrial orders with increasing complexity",
       "emails": ["email_002", "email_005"],
-      "theme": "High-volume product orders and industrial projects"
+      "theme": "High-volume product orders and industrial projects with learning progression"
     },
     {
       "id": "service_friday",
-      "name": "Service Friday",
-      "description": "Handle urgent service requests and emergency calls",
+      "name": "Emergency Response Friday",
+      "description": "Handle urgent service requests and emergency calls showing real-time response",
       "emails": ["email_001", "email_003"],
-      "theme": "Time-sensitive service requests requiring immediate response"
+      "theme": "Time-sensitive service requests requiring immediate response and escalation"
     },
     {
       "id": "professional_services",
-      "name": "Professional Services",
-      "description": "Complex professional service inquiries and contracts", 
+      "name": "Professional Services Deep Dive",
+      "description": "Complex professional service inquiries and contract negotiations", 
       "emails": ["email_004", "email_006"],
-      "theme": "High-value professional services and contract negotiations"
+      "theme": "High-value professional services with regulatory compliance requirements"
+    },
+    {
+      "id": "complexity_showcase",
+      "name": "Advanced Semantic Search Showcase",
+      "description": "Demonstrate advanced semantic understanding with multi-entity extraction and complex reasoning",
+      "emails": ["complex_email_001", "complex_email_002", "complex_email_003"],
+      "theme": "Expert-level semantic analysis with cross-domain knowledge integration",
+      "complexity_level": "Expert",
+      "learning_objectives": [
+        "Multi-entity extraction and cross-referencing",
+        "Technical specification understanding",
+        "Regulatory compliance identification",
+        "Emergency prioritization and escalation",
+        "Budget and timeline constraint recognition",
+        "Risk assessment and mitigation planning"
+      ]
+    },
+    {
+      "id": "cross_industry_intelligence",
+      "name": "Cross-Industry Intelligence Demo",
+      "description": "Show how the system learns patterns across industries and applies knowledge transfer",
+      "emails": ["email_001", "complex_email_002", "email_004", "complex_email_001"],
+      "theme": "Demonstrating cross-industry pattern recognition and knowledge transfer",
+      "complexity_level": "Advanced",
+      "learning_objectives": [
+        "Pattern recognition across industries",
+        "Terminology learning and application",
+        "Urgency classification consistency",
+        "Vendor specialization identification",
+        "Compliance requirement mapping"
+      ]
     }
-  ]
+  ],
+  "advanced_features": {
+    "semantic_search_demonstrations": [
+      {
+        "feature": "Multi-Entity Cross-Referencing",
+        "description": "Demonstrate how the system connects related entities across complex specifications",
+        "example_email": "complex_email_001",
+        "showcase": "316L stainless steel + pharmaceutical grade + ASTM standards + delivery phases"
+      },
+      {
+        "feature": "Cascade Failure Analysis", 
+        "description": "Show intelligent root cause analysis across interconnected system failures",
+        "example_email": "complex_email_002",
+        "showcase": "Equipment error code patterns + patient impact + regulatory notifications"
+      },
+      {
+        "feature": "Regulatory Harmonization",
+        "description": "Demonstrate understanding of multi-jurisdiction compliance requirements",
+        "example_email": "complex_email_003", 
+        "showcase": "International IP law + cross-border data privacy + regulatory pathways"
+      },
+      {
+        "feature": "Temporal Constraint Optimization",
+        "description": "Show how the system understands and prioritizes time-critical dependencies",
+        "example_email": "complex_email_001",
+        "showcase": "Phased delivery schedules + penalty clauses + critical path analysis"
+      }
+    ],
+    "learning_progression_metrics": {
+      "confidence_improvement": "Track confidence score increases through feedback iterations",
+      "entity_extraction_accuracy": "Monitor precision and recall of entity identification",
+      "cross_domain_transfer": "Measure knowledge application across different industries",
+      "response_time_optimization": "Track processing speed improvements over time",
+      "escalation_accuracy": "Monitor correct identification of high-priority scenarios"
+    }
+  }
 }

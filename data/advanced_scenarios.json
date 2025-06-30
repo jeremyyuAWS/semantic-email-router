@@ -1,0 +1,465 @@
+{
+  "complex_scenarios": [
+    {
+      "id": "multi_product_manufacturing",
+      "name": "Complex Manufacturing Order",
+      "description": "Multi-product order with intricate specifications and delivery constraints",
+      "difficulty": "Advanced",
+      "complexity_score": 8.5,
+      "emails": [
+        {
+          "id": "complex_email_001",
+          "company": "Apex Industrial Solutions",
+          "industry": "Manufacturing",
+          "subject": "Urgent Multi-Product Order - Q2 Production Line Upgrade",
+          "sender": "Jennifer Walsh <j.walsh@apexindustrial.com>",
+          "timestamp": "2025-01-15T07:45:00Z",
+          "priority": "High",
+          "complexity_indicators": [
+            "Multiple product specifications",
+            "Delivery coordination",
+            "Technical certifications required",
+            "Budget constraints",
+            "Quality standards"
+          ],
+          "attachments": [
+            {
+              "name": "technical_specifications_v4.pdf",
+              "type": "PDF",
+              "size": "4.8 MB",
+              "description": "Detailed engineering specifications and CAD drawings"
+            },
+            {
+              "name": "delivery_schedule.xlsx",
+              "type": "Excel",
+              "size": "1.2 MB",
+              "description": "Phased delivery timeline with dependencies"
+            },
+            {
+              "name": "certification_requirements.docx",
+              "type": "Word",
+              "size": "890 KB",
+              "description": "ASME, ISO, and FDA certification requirements"
+            }
+          ],
+          "content": "Good morning,\n\nWe need to finalize our Q2 production line upgrade order. This is a critical project with tight deadlines and strict quality requirements.\n\n**Primary Requirements:**\n\n1. **Stainless Steel Components (High Priority)**\n   - 75 pieces of 316L SS pipe, 2.5\" OD, Schedule 80, 20-ft lengths\n   - 120 pieces of 304 SS sheet, 4'x8', 14-gauge, #4 brushed finish\n   - 45 custom flanges per attached drawing DWG-2025-0847\n   - Material certs required for all items (ASTM A312, A240)\n\n2. **Specialized Fittings & Valves**\n   - 30 sanitary tri-clamp fittings, 2\" dia, 316L construction\n   - 15 butterfly valves, pneumatic actuated, FDA compliant\n   - 8 pressure relief valves, set @ 150 PSI, ASME certified\n\n3. **Critical Delivery Constraints**\n   - Phase 1 (SS pipe & sheet): Must arrive by March 15th\n   - Phase 2 (fittings): Required by March 25th\n   - Phase 3 (valves): Final delivery April 5th\n   - ANY delays will halt production - $50K/day penalty\n\n**Special Requirements:**\n- All materials must be pharmaceutical grade (FDA 21 CFR 177.2600)\n- Hydrostatic testing required on all pressure components\n- CoC (Certificate of Compliance) for each lot\n- Vendor must be ISO 9001:2015 certified\n- Budget ceiling: $185,000 (firm)\n\n**Quality Standards:**\n- Surface roughness: Ra ≤ 32 µin for all contact surfaces\n- Passivation per ASTM A967 required\n- PMI (Positive Material Identification) testing on 10% of materials\n- Full traceability to heat/lot numbers\n\nThis order supports our new biopharmaceutical production facility. Any substitutions or deviations require engineering approval. We have backup suppliers identified but prefer to work with your team given our history.\n\nAdditional technical questions:\n1. Can you provide stress analysis for custom flanges under thermal cycling?\n2. What's your current lead time on pneumatic actuators?\n3. Do you stock 316L in the required dimensions?\n4. Can you coordinate with our freight forwarder (Apex Logistics)?\n\nPlease confirm receipt and provide detailed quote with delivery schedule by January 18th. Our procurement team (CC'd) will need three business references for new vendor qualification.\n\nBest regards,\nJennifer Walsh, P.E.\nSenior Project Manager\nApex Industrial Solutions\nDirect: (555) 287-4590\nCell: (555) 287-4591\nj.walsh@apexindustrial.com\n\nCC: procurement@apexindustrial.com, quality@apexindustrial.com",
+          "semantic_complexity": {
+            "entity_density": "Very High",
+            "technical_depth": "Expert Level",
+            "cross_references": ["Drawings", "Standards", "Certifications"],
+            "temporal_constraints": "Multi-phase delivery",
+            "regulatory_requirements": ["FDA", "ASME", "ISO", "ASTM"],
+            "business_risk": "High - Production halt penalties"
+          },
+          "expected_analysis": {
+            "intent": "Complex Multi-Product Order Request",
+            "confidence": 0.96,
+            "entities": {
+              "primary_products": [
+                "316L SS pipe 2.5\" OD Schedule 80",
+                "304 SS sheet 4'x8' 14-gauge",
+                "Custom flanges per DWG-2025-0847"
+              ],
+              "secondary_products": [
+                "Sanitary tri-clamp fittings 2\"",
+                "Butterfly valves pneumatic",
+                "Pressure relief valves 150 PSI"
+              ],
+              "quantities": {
+                "ss_pipe": "75 pieces x 20ft",
+                "ss_sheet": "120 pieces",
+                "custom_flanges": "45 pieces",
+                "fittings": "30 pieces",
+                "butterfly_valves": "15 pieces",
+                "relief_valves": "8 pieces"
+              },
+              "specifications": {
+                "materials": "316L, 304 stainless steel",
+                "dimensions": "2.5\" OD, 4'x8', 14-gauge",
+                "finish": "#4 brushed, pharmaceutical grade",
+                "pressure_rating": "Schedule 80, 150 PSI"
+              },
+              "delivery_phases": {
+                "phase_1": "March 15th - SS pipe & sheet",
+                "phase_2": "March 25th - fittings",
+                "phase_3": "April 5th - valves"
+              },
+              "certifications_required": [
+                "ASTM A312", "ASTM A240", "FDA 21 CFR 177.2600",
+                "ASME certified", "ISO 9001:2015"
+              ],
+              "budget_constraint": "$185,000 firm ceiling",
+              "penalty_clause": "$50K/day for delays",
+              "quality_requirements": [
+                "Ra ≤ 32 µin surface roughness",
+                "ASTM A967 passivation",
+                "PMI testing on 10%",
+                "Full traceability"
+              ],
+              "contact_info": {
+                "primary": "Jennifer Walsh, P.E. - (555) 287-4590",
+                "email": "j.walsh@apexindustrial.com",
+                "cc_departments": ["procurement", "quality"]
+              }
+            },
+            "routing_tags": {
+              "department": "Engineering Sales",
+              "priority": "Critical",
+              "urgency": "High - 3 day quote deadline",
+              "project_type": "Pharmaceutical Manufacturing",
+              "risk_level": "High - Penalty clauses",
+              "requires_approval": "Engineering Manager",
+              "escalation_needed": true,
+              "specialist_required": "Pharmaceutical Grade Materials",
+              "delivery_coordination": "Multi-phase logistics"
+            },
+            "knowledge_matches": [
+              {
+                "source": "Penn_2025_Product_Catalog.xlsx",
+                "confidence": 0.94,
+                "matches": [
+                  "PIP-316L-2.5OD-SCH80: 316L SS Pipe 2.5\" OD Schedule 80",
+                  "SHT-304-4X8-14GA: 304 SS Sheet 4'x8' 14 Gauge"
+                ]
+              },
+              {
+                "source": "FDA_Compliance_Guide.pdf", 
+                "confidence": 0.89,
+                "matches": [
+                  "21 CFR 177.2600 compliance requirements",
+                  "Pharmaceutical grade material specifications"
+                ]
+              }
+            ],
+            "complexity_indicators": {
+              "multi_product": true,
+              "phased_delivery": true,
+              "regulatory_compliance": true,
+              "custom_components": true,
+              "penalty_clauses": true,
+              "certification_requirements": true,
+              "budget_constraints": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "emergency_medical_cascade",
+      "name": "Emergency Medical Equipment Cascade Failure",
+      "description": "Critical medical equipment failures requiring immediate intervention",
+      "difficulty": "Expert",
+      "complexity_score": 9.2,
+      "emails": [
+        {
+          "id": "complex_email_002",
+          "company": "Regional Medical Center - Emergency Operations",
+          "industry": "Healthcare",
+          "subject": "CODE RED: Multiple Equipment Failures - ICU & OR Compromise",
+          "sender": "Dr. Sarah Martinez, MD <s.martinez@regionalmedical.org>",
+          "timestamp": "2025-01-15T03:22:00Z",
+          "priority": "EMERGENCY",
+          "complexity_indicators": [
+            "Multiple simultaneous failures",
+            "Patient safety critical",
+            "Cascade failure analysis",
+            "24/7 response required",
+            "Backup system coordination"
+          ],
+          "attachments": [
+            {
+              "name": "equipment_failure_log.xlsx",
+              "type": "Excel", 
+              "size": "2.1 MB",
+              "description": "Real-time equipment status and error logs"
+            },
+            {
+              "name": "patient_impact_assessment.pdf",
+              "type": "PDF",
+              "size": "1.8 MB", 
+              "description": "Clinical impact analysis and risk assessment"
+            },
+            {
+              "name": "emergency_protocols.docx",
+              "type": "Word",
+              "size": "945 KB",
+              "description": "Emergency response procedures and contact lists"
+            }
+          ],
+          "content": "URGENT - PATIENT SAFETY ALERT\n\nWe are experiencing a cascade failure of critical medical equipment across multiple departments. This is compromising patient care and requires immediate technical response.\n\n**PRIMARY FAILURES (Critical - Patient Impact):**\n\n1. **ICU Ventilator Bank #3 (East Wing)**\n   - 4x Siemens Servo-i ventilators showing E-5047 errors\n   - Pressure sensors failing intermittently\n   - Affects 12 critical patients currently\n   - Backup ventilators deployed but insufficient capacity\n   - Error pattern suggests common component failure\n\n2. **OR Suite #2 Anesthesia System**\n   - Dräger Perseus A500 - Total system failure at 02:45\n   - Error codes: E-7821, E-7822, E-7831 (cascading)\n   - Surgery halted with patient under anesthesia\n   - Manual ventilation in progress\n   - Estimated repair window: <2 hours critical\n\n3. **Cardiac Cath Lab Imaging**\n   - Philips AlluraClarity FD20 C-arm system down\n   - Generator failure with arcing reported\n   - 3 cardiac procedures postponed\n   - No backup imaging available in sterile environment\n\n**SECONDARY FAILURES (Infrastructure Impact):**\n\n4. **Medical Gas System - Zone 7**\n   - O2 pressure dropping: 50 PSI → 35 PSI (critical at 30)\n   - Backup cylinders activated but limited duration\n   - Manifold leak suspected - affects OR 2, 3, 4\n   - Could cascade to ventilator failures\n\n5. **Infusion Pump Network**\n   - 15x Alaris GP pumps showing network errors\n   - Drug library updates failing\n   - Manual dosing required - medication error risk\n   - Pattern suggests network infrastructure issue\n\n**IMMEDIATE REQUIREMENTS:**\n\n**Emergency Parts Needed (2-hour delivery required):**\n- Siemens Servo-i pressure sensor assemblies (P/N: 6SE70-0DG84-4HC4) - Qty: 6\n- Dräger Perseus flow sensor module (P/N: 8406229) - Qty: 2  \n- Philips X-ray tube assembly (P/N: 9896 000 20451) - Qty: 1\n- Medical gas manifold seals kit (Oxy-Vac compatible) - Qty: 1\n\n**Technical Support Required:**\n- Level 3 biomedical technician (Siemens certified)\n- Dräger anesthesia specialist (on-site within 1 hour)\n- Philips imaging engineer (remote diagnostics capable)\n- Medical gas technician (licensed for OR environment)\n\n**Clinical Contingencies Active:**\n- Patient transfers to sister facility initiated\n- Emergency OR opened in Ambulatory wing  \n- Manual ventilation teams deployed\n- Pharmacy preparing manual infusion protocols\n- Administration coordinating media/family communications\n\n**Root Cause Hypothesis:**\nTimeline analysis suggests electrical transient at 02:30 may have triggered cascade. UPS logs show brief voltage spike. This could explain simultaneous failures across different vendors/systems.\n\n**Regulatory Notifications Required:**\n- Joint Commission incident report\n- FDA adverse event reporting (Class I devices)\n- State health department notification\n- Insurance carrier immediate notice\n\n**Business Continuity:**\n- Estimated revenue impact: $75K/hour (OR closures)\n- Patient diversion costs accumulating\n- Staff overtime at 1.5x rate\n- Reputation management required\n\n**Previous Similar Incidents:**\n- Cascade failure Nov 2024 (resolved in 6 hours)\n- Annual preventive maintenance due next month\n- Vendor contracts allow emergency response fees\n\nPlease coordinate immediate response. Every minute affects patient outcomes. I will be available continuously until resolution.\n\nDr. Sarah Martinez, MD\nChief of Critical Care\nRegional Medical Center\nEmergency Line: (555) 234-7800\nDirect: (555) 234-7801\nCell: (555) 234-7802\ns.martinez@regionalmedical.org\n\nCC: CEO@regionalmedical.org, CNO@regionalmedical.org, riskmanagement@regionalmedical.org\n\nLOGGED: Hospital Incident Command System Activated\nTIME: 03:22 EST\nSTATUS: CODE RED - Equipment Emergency",
+          "semantic_complexity": {
+            "entity_density": "Extreme",
+            "technical_depth": "Medical Expert",
+            "cross_references": ["Error codes", "Part numbers", "Procedures"],
+            "temporal_urgency": "Life-critical (<2 hours)",
+            "regulatory_requirements": ["FDA", "Joint Commission", "State Health"],
+            "business_risk": "Extreme - Patient safety + Revenue"
+          },
+          "expected_analysis": {
+            "intent": "Emergency Medical Equipment Repair Request",
+            "confidence": 0.98,
+            "entities": {
+              "failed_equipment": [
+                {
+                  "device": "Siemens Servo-i ventilators",
+                  "quantity": "4 units",
+                  "error_codes": ["E-5047"],
+                  "patient_impact": "12 critical patients",
+                  "failure_type": "Pressure sensor intermittent"
+                },
+                {
+                  "device": "Dräger Perseus A500",
+                  "location": "OR Suite #2", 
+                  "error_codes": ["E-7821", "E-7822", "E-7831"],
+                  "status": "Total failure",
+                  "criticality": "Surgery in progress"
+                },
+                {
+                  "device": "Philips AlluraClarity FD20",
+                  "location": "Cardiac Cath Lab",
+                  "failure_type": "Generator with arcing",
+                  "procedures_affected": "3 cardiac postponed"
+                }
+              ],
+              "parts_required": [
+                {
+                  "part": "Siemens pressure sensor",
+                  "part_number": "6SE70-0DG84-4HC4",
+                  "quantity": 6,
+                  "urgency": "2-hour delivery"
+                },
+                {
+                  "part": "Dräger flow sensor module",
+                  "part_number": "8406229", 
+                  "quantity": 2,
+                  "urgency": "1-hour on-site support"
+                }
+              ],
+              "specialists_needed": [
+                "Level 3 biomedical technician (Siemens certified)",
+                "Dräger anesthesia specialist",
+                "Philips imaging engineer",
+                "Medical gas technician"
+              ],
+              "regulatory_notifications": [
+                "Joint Commission incident report",
+                "FDA adverse event reporting", 
+                "State health department",
+                "Insurance carrier notice"
+              ],
+              "business_impact": {
+                "revenue_loss": "$75K/hour",
+                "patient_diversions": "Active",
+                "staff_overtime": "1.5x rate",
+                "reputation_risk": "High"
+              },
+              "root_cause_hypothesis": "Electrical transient at 02:30",
+              "emergency_protocols": "Hospital Incident Command System Activated"
+            },
+            "routing_tags": {
+              "department": "Emergency Biomedical Engineering", 
+              "priority": "CRITICAL - CODE RED",
+              "urgency": "Life Safety - Immediate",
+              "escalation": "C-Suite + Risk Management",
+              "response_time": "<30 minutes",
+              "specialist_dispatch": "Multiple vendors",
+              "regulatory_flags": ["FDA reportable", "Joint Commission"],
+              "business_continuity": "Revenue + Reputation impact"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "international_legal_complexity",
+      "name": "Multi-Jurisdiction Legal Compliance Review",
+      "description": "Complex international contract with regulatory compliance across multiple jurisdictions",
+      "difficulty": "Expert",
+      "complexity_score": 9.0,
+      "emails": [
+        {
+          "id": "complex_email_003",
+          "company": "Global Pharma Dynamics",
+          "industry": "Legal",
+          "subject": "Urgent: Multi-Jurisdiction IP Licensing + Regulatory Compliance Review",
+          "sender": "Amanda Chen, Esq. <a.chen@globalpharma.com>",
+          "timestamp": "2025-01-15T11:30:00Z",
+          "priority": "High",
+          "complexity_indicators": [
+            "Multi-jurisdiction compliance",
+            "Intellectual property licensing",
+            "Regulatory harmonization",
+            "Cross-border data privacy",
+            "International trade law"
+          ],
+          "attachments": [
+            {
+              "name": "master_licensing_agreement_v7.pdf",
+              "type": "PDF",
+              "size": "8.7 MB",
+              "description": "Master IP licensing agreement with 47 clauses"
+            },
+            {
+              "name": "regulatory_matrix.xlsx", 
+              "type": "Excel",
+              "size": "3.2 MB",
+              "description": "Compliance requirements across 12 jurisdictions"
+            },
+            {
+              "name": "patent_portfolio_analysis.pptx",
+              "type": "PowerPoint", 
+              "size": "15.4 MB",
+              "description": "IP landscape analysis with freedom-to-operate"
+            }
+          ],
+          "content": "Urgent Legal Review Required\n\nWe need comprehensive legal analysis for our most complex international licensing deal to date. This involves multiple therapeutic areas, cross-border data transfers, and regulatory harmonization across major pharmaceutical markets.\n\n**TRANSACTION OVERVIEW:**\n\n**Parties & Structure:**\n- Licensor: BioNova AG (Switzerland) - Novel gene therapy platform\n- Licensee: Global Pharma Dynamics Inc. (Delaware/US)\n- Sub-licensees: Subsidiaries in EU, UK, Japan, Canada, Australia\n- Technology: CRISPR-based therapeutics for rare diseases\n- Deal Value: $2.8B milestone-based + royalties\n\n**COMPLEX LEGAL ISSUES REQUIRING ANALYSIS:**\n\n**1. Intellectual Property Harmonization**\n- 47 patent families across 12 jurisdictions\n- Prosecution strategies differ by region (US vs EU vs Japan)\n- Freedom-to-operate clearance required in each market\n- Blocking patents identified in 3 jurisdictions\n- Patent term extensions vary by regulatory pathway\n- Prior art challenges pending in EPO and USPTO\n\n**2. Regulatory Compliance Matrix**\n- FDA: Breakthrough Therapy designation sought\n- EMA: PRIME qualification under Article 57\n- PMDA: Sakigake designation for orphan conditions  \n- Health Canada: Notice of Compliance with conditions\n- TGA: Provisional approval pathway consideration\n- Each requires different data packages and timelines\n\n**3. Cross-Border Data Privacy & Security**\n- GDPR compliance for EU patient data (Article 9 special categories)\n- HIPAA requirements for US clinical data\n- Canada PIPEDA for health information\n- Japan APPI for personal information protection\n- Switzerland nFADP alignment with EU adequacy\n- Data localization requirements in 3 jurisdictions\n\n**4. International Trade & Export Controls**\n- ITAR classification review (gene therapy = dual-use?)\n- Export Administration Regulations (EAR) compliance\n- EU dual-use regulation 2021/821 analysis\n- Wassenaar Arrangement considerations\n- Technology transfer restrictions to certain countries\n- Deemed export issues for international R&D teams\n\n**SPECIFIC LEGAL QUESTIONS:**\n\n**Contract Structuring:**\n1. Should we use Swiss or Delaware law as governing law?\n2. Arbitration vs litigation for disputes (ICC vs JAMS vs LCIA)?\n3. Force majeure clauses post-COVID/geopolitical tensions?\n4. Currency hedging for milestone payments in multiple currencies?\n5. Tax optimization across transfer pricing regulations?\n\n**Regulatory Strategy:**\n1. Orphan drug exclusivity periods vary - how to harmonize?\n2. Data exclusivity periods: 12 years US vs 8-10 years EU\n3. Reference pricing impact on royalty calculations\n4. Regulatory data protection across jurisdictions\n5. Accelerated approval pathways - risk/benefit analysis\n\n**IP Protection:**\n1. Patent prosecution costs allocation (estimated $15M over 10 years)\n2. Opposition/invalidation defense strategies\n3. Patent term extension timing across regions\n4. Trade secret protection for manufacturing know-how\n5. Freedom-to-operate insurance coverage gaps\n\n**Compliance & Risk:**\n1. Anti-bribery compliance (FCPA, UK Bribery Act, Swiss StCC)\n2. Competition law clearance requirements\n3. National security review triggers (CFIUS, EU FDI, etc.)\n4. Clinical data integrity across regulatory systems\n5. Pharmacovigilance harmonization requirements\n\n**TIMELINE CONSTRAINTS:**\n- Term sheet signed - due diligence period expires Jan 25th\n- Regulatory submissions planned for Q2 2025\n- IPO roadshow scheduled for Q3 2025 (disclosure requirements)\n- Patent prosecution deadlines in multiple jurisdictions\n- Clinical trial start dates dependent on regulatory clearance\n\n**BUDGET PARAMETERS:**\n- Legal spend approved: $850K for transaction\n- Ongoing compliance costs: $200K annually\n- Regulatory consulting: $300K across all jurisdictions\n- IP prosecution/maintenance: $150K annually\n- Dispute resolution reserve: $500K\n\n**DELIVERABLES REQUIRED:**\n1. Risk matrix with mitigation strategies\n2. Jurisdiction-by-jurisdiction compliance roadmap\n3. Contract mark-up with detailed commentary\n4. Regulatory filing strategy with timelines\n5. IP prosecution and enforcement plan\n6. Privacy impact assessment for data transfers\n7. Export control classification determinations\n\nThis transaction represents 35% of our annual revenue potential. Board approval required by January 22nd. Any show-stopper issues must be identified immediately.\n\nWe have engaged local counsel in each jurisdiction but need coordinating expertise to ensure consistency and identify conflicts between legal systems.\n\nAmanda Chen, Esq.\nVice President, Legal Affairs\nGlobal Pharma Dynamics\nDirect: (555) 847-2900\nCell: (555) 847-2901\na.chen@globalpharma.com\n\nCC: CEO@globalpharma.com, CFO@globalpharma.com, CLO@globalpharma.com\n\nFILED: Matter #2025-GPD-001 (High Priority)\nNDA: All recipients bound by confidentiality\nPRIVILEGE: Attorney-client privileged communication",
+          "semantic_complexity": {
+            "entity_density": "Extreme",
+            "technical_depth": "Legal Expert + Regulatory",
+            "cross_references": ["Regulations", "Jurisdictions", "Patents", "Treaties"],
+            "temporal_constraints": "Board approval deadline",
+            "regulatory_requirements": ["FDA", "EMA", "PMDA", "GDPR", "ITAR"],
+            "business_risk": "Extreme - 35% annual revenue"
+          },
+          "expected_analysis": {
+            "intent": "Complex International Legal Review Request",
+            "confidence": 0.97,
+            "entities": {
+              "transaction_structure": {
+                "licensor": "BioNova AG (Switzerland)",
+                "licensee": "Global Pharma Dynamics Inc. (Delaware)",
+                "technology": "CRISPR-based therapeutics",
+                "deal_value": "$2.8B milestone-based + royalties",
+                "revenue_impact": "35% of annual revenue"
+              },
+              "legal_jurisdictions": [
+                "United States (FDA, CFIUS, FCPA)",
+                "European Union (EMA, GDPR, Competition)",
+                "United Kingdom (Bribery Act, FDI)",
+                "Japan (PMDA, APPI)",
+                "Canada (Health Canada, PIPEDA)",
+                "Australia (TGA)",
+                "Switzerland (nFADP, StCC)"
+              ],
+              "regulatory_pathways": [
+                "FDA Breakthrough Therapy designation",
+                "EMA PRIME qualification", 
+                "PMDA Sakigake designation",
+                "Health Canada Notice of Compliance",
+                "TGA Provisional approval"
+              ],
+              "ip_complexity": {
+                "patent_families": "47 across 12 jurisdictions",
+                "blocking_patents": "3 jurisdictions",
+                "prosecution_costs": "$15M over 10 years",
+                "freedom_to_operate": "Required in each market"
+              },
+              "compliance_areas": [
+                "Cross-border data privacy (GDPR, HIPAA, PIPEDA)",
+                "Export controls (ITAR, EAR, EU dual-use)",
+                "Anti-bribery (FCPA, UK Bribery Act)",
+                "Competition law clearance",
+                "National security reviews"
+              ],
+              "budget_allocation": {
+                "transaction_legal": "$850K",
+                "ongoing_compliance": "$200K annually",
+                "regulatory_consulting": "$300K",
+                "ip_costs": "$150K annually",
+                "dispute_reserve": "$500K"
+              },
+              "timeline_constraints": {
+                "due_diligence_expires": "January 25th",
+                "board_approval_required": "January 22nd", 
+                "regulatory_submissions": "Q2 2025",
+                "ipo_roadshow": "Q3 2025"
+              }
+            },
+            "routing_tags": {
+              "department": "International Legal Practice",
+              "priority": "Critical",
+              "urgency": "7-day deadline",
+              "expertise_required": [
+                "International IP law",
+                "Pharmaceutical regulation",
+                "Cross-border M&A",
+                "Export control law",
+                "Data privacy compliance"
+              ],
+              "escalation": "CLO + Board level",
+              "matter_type": "High-value transaction",
+              "risk_level": "Maximum - revenue critical",
+              "coordination_required": "Multi-jurisdiction counsel"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "advanced_search_patterns": [
+    {
+      "pattern_type": "Multi-Entity Cross-Reference",
+      "description": "Searching across multiple knowledge sources to resolve complex specifications",
+      "example_query": "316L stainless steel pharmaceutical grade ASTM A312 FDA 21 CFR 177.2600",
+      "expected_sources": [
+        "Materials catalog for specifications",
+        "FDA compliance guide for regulations", 
+        "ASTM standards database",
+        "Pharmaceutical certification requirements"
+      ]
+    },
+    {
+      "pattern_type": "Cascading Error Analysis",
+      "description": "Identifying root causes across interconnected system failures",
+      "example_query": "Siemens Servo-i E-5047 pressure sensor cascade ventilator network",
+      "expected_sources": [
+        "Equipment service manual for error codes",
+        "System architecture documentation",
+        "Previous incident reports",
+        "Vendor technical bulletins"
+      ]
+    },
+    {
+      "pattern_type": "Regulatory Harmonization",
+      "description": "Cross-referencing requirements across multiple jurisdictions",
+      "example_query": "GDPR HIPAA PIPEDA cross-border clinical data CRISPR gene therapy",
+      "expected_sources": [
+        "Privacy regulation database",
+        "Clinical trial guidelines",
+        "Gene therapy regulatory pathways",
+        "International data transfer agreements"
+      ]
+    },
+    {
+      "pattern_type": "Temporal Constraint Resolution",
+      "description": "Identifying time-critical dependencies and delivery sequences", 
+      "example_query": "phased delivery March 15 Schedule 80 pharmaceutical grade production halt penalty",
+      "expected_sources": [
+        "Inventory availability systems",
+        "Logistics scheduling database",
+        "Contract terms and penalties",
+        "Production planning systems"
+      ]
+    }
+  ],
+  "complexity_indicators": {
+    "entity_extraction_difficulty": {
+      "low": "1-5 entities, single domain",
+      "medium": "6-15 entities, related domains", 
+      "high": "16-30 entities, cross-domain",
+      "expert": "30+ entities, multi-domain with dependencies"
+    },
+    "semantic_reasoning_levels": {
+      "literal": "Direct text matching",
+      "inferential": "Context-based interpretation",
+      "associative": "Cross-reference resolution",
+      "analytical": "Multi-step logical reasoning"
+    },
+    "knowledge_integration_depth": {
+      "single_source": "One document/catalog lookup",
+      "multi_source": "Cross-reference multiple documents",
+      "synthesis": "Combine information across sources",
+      "expert_reasoning": "Apply domain expertise to novel situations"
+    }
+  }
+}
