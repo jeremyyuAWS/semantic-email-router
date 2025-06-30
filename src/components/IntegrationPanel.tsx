@@ -28,12 +28,10 @@ interface RoutingScenario {
 
 interface IntegrationPanelProps {
   processedEmails?: ProcessedEmail[];
-  routingResults?: any[];
 }
 
 const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
-  processedEmails = [],
-  routingResults = []
+  processedEmails = []
 }) => {
   const [integrations, setIntegrations] = useState<IntegrationEndpoint[]>([
     // CRM Systems
