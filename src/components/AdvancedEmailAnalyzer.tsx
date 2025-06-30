@@ -102,7 +102,7 @@ const AdvancedEmailAnalyzer: React.FC<AdvancedEmailAnalyzerProps> = ({ onScenari
     if (urgencyMatches) keyTerms.push(...urgencyMatches.slice(0, 2));
 
     // Extract regulatory terms
-    const regulatoryMatches = content.match/fda|astm|iso|asme|cfr|gdpr|hipaa/gi);
+    const regulatoryMatches = content.match(/fda|astm|iso|asme|cfr|gdpr|hipaa/gi);
     if (regulatoryMatches) keyTerms.push(...regulatoryMatches.slice(0, 3));
 
     return keyTerms.join(' ');
