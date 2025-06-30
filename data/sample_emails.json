@@ -1,0 +1,279 @@
+{
+  "emails": [
+    {
+      "id": "email_001",
+      "company": "Tiny's Demolition",
+      "industry": "Construction",
+      "subject": "Quote Request - Downtown Job Site",
+      "sender": "Mike Johnson <mjohnson@tinysdemolition.com>",
+      "timestamp": "2025-01-15T08:30:00Z",
+      "attachments": [
+        {
+          "name": "site_photos.pdf",
+          "type": "PDF",
+          "size": "2.3 MB",
+          "description": "Job site photos and measurements"
+        }
+      ],
+      "content": "Hi there,\n\nCan you send over a quote for a debris pickup from the downtown job site? We need 5 dumpsters by Friday for our concrete demolition project. The site is at 123 Main Street downtown. Let me know pricing and availability.\n\nThanks,\nMike Johnson\nTiny's Demolition Services\n(555) 123-4567\nmjohnson@tinysdemolition.com",
+      "expected_analysis": {
+        "intent": "Service Quote Request",
+        "entities": {
+          "service": "Debris Pickup",
+          "quantity": "5 dumpsters",
+          "location": "Downtown job site, 123 Main Street",
+          "due_date": "Friday",
+          "material_type": "Concrete demolition debris",
+          "contact_phone": "(555) 123-4567",
+          "contact_email": "mjohnson@tinysdemolition.com"
+        },
+        "routing_tags": {
+          "department": "Operations",
+          "urgency": "High",
+          "service_line": "Waste Management",
+          "matched_service_code": "DPK-05",
+          "requires_site_visit": true
+        },
+        "confidence": 0.94
+      }
+    },
+    {
+      "id": "email_002", 
+      "company": "Penn Stainless",
+      "industry": "Manufacturing",
+      "subject": "Order Request - 304 Stainless Pipe",
+      "sender": "Sarah Chen <s.chen@chenmanufacturing.com>",
+      "timestamp": "2025-01-15T10:15:00Z",
+      "attachments": [
+        {
+          "name": "specifications.pdf",
+          "type": "PDF",
+          "size": "1.8 MB",
+          "description": "Detailed pipe specifications and tolerances"
+        },
+        {
+          "name": "project_drawings.dwg",
+          "type": "CAD",
+          "size": "4.2 MB",
+          "description": "Engineering drawings"
+        }
+      ],
+      "content": "Hello,\n\nI'd like to place an order for 1.5\" OD 304 stainless steel pipe, 20-ft lengths. We need 50 pieces for our upcoming project. Can you provide pricing and lead time?\n\nPlease confirm specifications:\n- Material: 304 stainless steel\n- Outside diameter: 1.5 inches\n- Length: 20 feet each\n- Quantity: 50 pieces\n- Wall thickness: Schedule 40\n\nBest regards,\nSarah Chen\nChen Manufacturing\nPhone: (555) 987-6543\ns.chen@chenmanufacturing.com",
+      "expected_analysis": {
+        "intent": "Product Order Request",
+        "entities": {
+          "product": "304 stainless steel pipe",
+          "specifications": "1.5\" OD, 20-ft length, Schedule 40",
+          "quantity": "50 pieces",
+          "material_grade": "304 stainless steel",
+          "contact_phone": "(555) 987-6543",
+          "contact_email": "s.chen@chenmanufacturing.com"
+        },
+        "routing_tags": {
+          "product_line": "Pipe & Tubing",
+          "priority": "Normal",
+          "department": "Sales",
+          "matched_catalog_sku": "PIP-304-1.5OD-SCH40",
+          "requires_quote": true
+        },
+        "confidence": 0.97
+      }
+    },
+    {
+      "id": "email_003",
+      "company": "St. Mary's Hospital",
+      "industry": "Healthcare",
+      "subject": "Urgent - Medical Equipment Repair Request",
+      "sender": "Dr. Patricia Martinez <p.martinez@stmarys.health>",
+      "timestamp": "2025-01-15T14:22:00Z",
+      "attachments": [
+        {
+          "name": "error_log.txt",
+          "type": "Text",
+          "size": "45 KB",
+          "description": "Equipment error log from past 48 hours"
+        },
+        {
+          "name": "warranty_info.pdf",
+          "type": "PDF",
+          "size": "892 KB",
+          "description": "Equipment warranty and service contract"
+        }
+      ],
+      "content": "URGENT - Medical Equipment Issue\n\nOur MRI Unit #3 (Model: Siemens Magnetom Vida) in the Radiology Department has been showing intermittent error codes since yesterday morning. The unit is critical for our cardiac imaging program.\n\nError Code: E-2847 (Gradient coil temperature warning)\nSerial Number: SMV-2019-0847\nLast Service: September 2024\n\nWe need immediate technical support. This affects patient care directly.\n\nContact: Dr. Patricia Martinez\nRadiology Department\nSt. Mary's Hospital\nDirect: (555) 234-7890\nEmergency: (555) 234-7800\np.martinez@stmarys.health",
+      "expected_analysis": {
+        "intent": "Emergency Service Request",
+        "entities": {
+          "equipment": "Siemens Magnetom Vida MRI",
+          "error_code": "E-2847",
+          "serial_number": "SMV-2019-0847",
+          "location": "Radiology Department",
+          "urgency": "Critical",
+          "contact_phone": "(555) 234-7890",
+          "contact_email": "p.martinez@stmarys.health"
+        },
+        "routing_tags": {
+          "department": "Medical Equipment Services",
+          "priority": "Critical",
+          "service_type": "Emergency Repair",
+          "response_time": "2 hours",
+          "escalation_required": true
+        },
+        "confidence": 0.96
+      }
+    },
+    {
+      "id": "email_004",
+      "company": "Morrison & Associates Law",
+      "industry": "Legal",
+      "subject": "Document Review - Contract Analysis Needed",
+      "sender": "James Morrison <j.morrison@morrisonlaw.com>",
+      "timestamp": "2025-01-15T11:45:00Z",
+      "attachments": [
+        {
+          "name": "supply_agreement_v3.pdf",
+          "type": "PDF",
+          "size": "3.7 MB",
+          "description": "Multi-party supply agreement requiring review"
+        },
+        {
+          "name": "redlines_summary.docx",
+          "type": "Word",
+          "size": "156 KB",
+          "description": "Summary of requested contract changes"
+        }
+      ],
+      "content": "Good morning,\n\nWe require comprehensive contract analysis for a new multi-party supply agreement. The contract involves international shipping terms, intellectual property clauses, and regulatory compliance requirements.\n\nScope of Review Needed:\n- Risk assessment (liability, force majeure, termination)\n- Compliance with FDA regulations for medical device components\n- International trade law implications\n- IP protection and confidentiality provisions\n\nDeadline: End of week (Friday, January 17th)\nBudget: $15,000 - $25,000 range\n\nPlease confirm availability and provide time estimate.\n\nRegards,\nJames Morrison, Esq.\nSenior Partner\nMorrison & Associates\n(555) 456-7890\nj.morrison@morrisonlaw.com",
+      "expected_analysis": {
+        "intent": "Professional Service Request",
+        "entities": {
+          "service": "Contract Analysis",
+          "document_type": "Multi-party supply agreement",
+          "deadline": "Friday, January 17th",
+          "budget_range": "$15,000 - $25,000",
+          "compliance_areas": "FDA, International trade, IP protection",
+          "contact_phone": "(555) 456-7890",
+          "contact_email": "j.morrison@morrisonlaw.com"
+        },
+        "routing_tags": {
+          "department": "Legal Services",
+          "priority": "High",
+          "service_type": "Contract Review",
+          "expertise_required": "International Law, IP, Regulatory",
+          "budget_tier": "Premium"
+        },
+        "confidence": 0.93
+      }
+    },
+    {
+      "id": "email_005",
+      "company": "Blue Ridge Construction",
+      "industry": "Construction",
+      "subject": "Subcontractor Bid - HVAC Installation",
+      "sender": "Carlos Rodriguez <c.rodriguez@blueridgeconstruction.com>",
+      "timestamp": "2025-01-15T09:20:00Z",
+      "attachments": [
+        {
+          "name": "building_plans.pdf",
+          "type": "PDF",
+          "size": "12.4 MB",
+          "description": "Architectural drawings and HVAC layouts"
+        },
+        {
+          "name": "specifications.xlsx",
+          "type": "Excel",
+          "size": "2.1 MB",
+          "description": "Equipment specifications and quantities"
+        }
+      ],
+      "content": "Hello,\n\nWe're seeking bids for HVAC installation on a new 45,000 sq ft office building project. The job includes:\n\n- Installation of 8 rooftop units (5-ton capacity each)\n- Ductwork throughout 3 floors\n- VAV boxes and controls system\n- Building automation integration\n\nProject Timeline: March 1 - May 15, 2025\nLocation: 1247 Commerce Drive, Industrial Park\nGeneral Contractor: Blue Ridge Construction\n\nPrevailing wage project. Licensed contractors only.\n\nBid deadline: January 25th, 2025\n\nContact for site visit:\nCarlos Rodriguez\nProject Manager\nBlue Ridge Construction\n(555) 789-0123\nc.rodriguez@blueridgeconstruction.com",
+      "expected_analysis": {
+        "intent": "Bid Request",
+        "entities": {
+          "project_type": "HVAC Installation",
+          "building_size": "45,000 sq ft",
+          "equipment": "8 rooftop units, 5-ton capacity",
+          "timeline": "March 1 - May 15, 2025",
+          "location": "1247 Commerce Drive, Industrial Park",
+          "bid_deadline": "January 25th, 2025",
+          "contact_phone": "(555) 789-0123",
+          "contact_email": "c.rodriguez@blueridgeconstruction.com"
+        },
+        "routing_tags": {
+          "department": "HVAC Division",
+          "priority": "High",
+          "project_type": "Commercial",
+          "requires_license": true,
+          "prevailing_wage": true
+        },
+        "confidence": 0.91
+      }
+    },
+    {
+      "id": "email_006",
+      "company": "Regional Medical Center",
+      "industry": "Healthcare",
+      "subject": "Pharmaceutical Supply Agreement Renewal",
+      "sender": "Dr. Lisa Park <l.park@regionalmedical.org>",
+      "timestamp": "2025-01-15T13:10:00Z",
+      "attachments": [
+        {
+          "name": "current_formulary.xlsx",
+          "type": "Excel",
+          "size": "5.8 MB",
+          "description": "Current pharmaceutical formulary and usage data"
+        },
+        {
+          "name": "pricing_comparison.pdf",
+          "type": "PDF",
+          "size": "1.2 MB",
+          "description": "Competitive pricing analysis"
+        }
+      ],
+      "content": "Dear Procurement Team,\n\nWe need to renew our pharmaceutical supply agreement before the current contract expires on March 31st. Our annual pharmaceutical spend is approximately $2.8M.\n\nKey Requirements:\n- 24/7 emergency delivery capability\n- 340B pricing compliance\n- Cold chain management for biologics\n- Real-time inventory tracking\n- Minimum 98% fill rate guarantee\n\nCritical medications include:\n- Oncology drugs (specialty handling required)\n- Emergency medications (code cart supplies)\n- Surgical anesthetics\n- ICU critical care medications\n\nPlease schedule a meeting to discuss terms by January 20th.\n\nDr. Lisa Park\nChief of Pharmacy\nRegional Medical Center\nPhone: (555) 321-9876\nl.park@regionalmedical.org",
+      "expected_analysis": {
+        "intent": "Contract Renewal Request",
+        "entities": {
+          "contract_type": "Pharmaceutical Supply Agreement",
+          "annual_spend": "$2.8M",
+          "expiration_date": "March 31st",
+          "key_requirements": "24/7 delivery, 340B pricing, cold chain, inventory tracking",
+          "meeting_deadline": "January 20th",
+          "contact_phone": "(555) 321-9876",
+          "contact_email": "l.park@regionalmedical.org"
+        },
+        "routing_tags": {
+          "department": "Pharmaceutical Sales",
+          "priority": "High",
+          "contract_value": "Premium",
+          "compliance_required": "340B",
+          "renewal_timeline": "60 days"
+        },
+        "confidence": 0.95
+      }
+    }
+  ],
+  "demo_scenarios": [
+    {
+      "id": "manufacturing_monday",
+      "name": "Manufacturing Monday",
+      "description": "Process multiple manufacturing and industrial orders",
+      "emails": ["email_002", "email_005"],
+      "theme": "High-volume product orders and industrial projects"
+    },
+    {
+      "id": "service_friday",
+      "name": "Service Friday",
+      "description": "Handle urgent service requests and emergency calls",
+      "emails": ["email_001", "email_003"],
+      "theme": "Time-sensitive service requests requiring immediate response"
+    },
+    {
+      "id": "professional_services",
+      "name": "Professional Services",
+      "description": "Complex professional service inquiries and contracts", 
+      "emails": ["email_004", "email_006"],
+      "theme": "High-value professional services and contract negotiations"
+    }
+  ]
+}

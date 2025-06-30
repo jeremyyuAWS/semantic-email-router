@@ -1,0 +1,267 @@
+{
+  "uploaded_files": [
+    {
+      "id": "file_001",
+      "name": "Service_Catalog_2025.xlsx",
+      "type": "Excel",
+      "size": "2.3 MB",
+      "uploaded_date": "2025-01-02",
+      "status": "Processed",
+      "rows_extracted": 245,
+      "chunks_created": 87,
+      "description": "Complete service catalog with codes, pricing, and descriptions",
+      "processing_time": "2.4 seconds",
+      "sample_data": [
+        {
+          "row": 88,
+          "service_code": "DPK-05",
+          "service_name": "Debris Pickup - 5 Dumpster Service",
+          "category": "Waste Management",
+          "base_price": "$2,850",
+          "description": "Five 20-yard dumpsters with pickup service",
+          "response_time": "24-48 hours",
+          "equipment_required": "Roll-off truck, containers"
+        },
+        {
+          "row": 134,
+          "service_code": "DEMO-COM",
+          "service_name": "Commercial Interior Demolition", 
+          "category": "Demolition Services",
+          "base_price": "$12.50/sq ft",
+          "description": "Full interior demo including drywall, flooring, and cleanup",
+          "permits_required": "Yes",
+          "safety_protocols": "OSHA compliant"
+        },
+        {
+          "row": 201,
+          "service_code": "HVAC-INST",
+          "service_name": "Commercial HVAC Installation",
+          "category": "Mechanical Services",
+          "base_price": "$85,000 - $150,000",
+          "description": "Complete HVAC system installation with controls",
+          "license_required": "Yes",
+          "warranty": "5 years parts/labor"
+        }
+      ]
+    },
+    {
+      "id": "file_002",
+      "name": "Penn_2025_Product_Catalog.xlsx",
+      "type": "Excel", 
+      "size": "5.7 MB",
+      "uploaded_date": "2025-01-02",
+      "status": "Processed",
+      "rows_extracted": 1847,
+      "chunks_created": 423,
+      "description": "Complete stainless steel product catalog with specifications",
+      "processing_time": "8.1 seconds",
+      "sample_data": [
+        {
+          "row": 172,
+          "sku": "PIP-304-1.5OD-SCH40",
+          "product_name": "304 SS Pipe 1.5\" OD Schedule 40",
+          "category": "Pipe & Tubing",
+          "price_per_foot": "$28.50",
+          "stock_status": "In Stock",
+          "lead_time": "2-3 business days",
+          "material_cert": "Mill Test Certificate included",
+          "applications": "Food grade, pharmaceutical, chemical processing"
+        },
+        {
+          "row": 298,
+          "sku": "PIP-316-2.0OD-SCH80", 
+          "product_name": "316 SS Pipe 2.0\" OD Schedule 80",
+          "category": "Pipe & Tubing",
+          "price_per_foot": "$45.25",
+          "stock_status": "Limited",
+          "lead_time": "5-7 business days",
+          "corrosion_resistance": "Marine grade",
+          "temperature_range": "-20°F to 800°F"
+        },
+        {
+          "row": 445,
+          "sku": "SHT-304-4X8-16GA",
+          "product_name": "304 SS Sheet 4'x8' 16 Gauge",
+          "category": "Sheet & Plate",
+          "price_per_sheet": "$285.00",
+          "stock_status": "In Stock",
+          "lead_time": "Same day",
+          "surface_finish": "#4 brushed",
+          "thickness": "0.0598 inches"
+        }
+      ]
+    },
+    {
+      "id": "file_003",
+      "name": "Safety_Protocols.pdf",
+      "type": "PDF",
+      "size": "1.2 MB", 
+      "uploaded_date": "2025-01-02",
+      "status": "Processed",
+      "pages_extracted": 28,
+      "chunks_created": 52,
+      "description": "OSHA compliance and safety protocols for all service operations",
+      "processing_time": "3.2 seconds",
+      "sample_sections": [
+        {
+          "page": 12,
+          "section": "Demolition Safety Requirements",
+          "content": "All commercial demolition projects require site assessment, permit verification, and hazmat inspection prior to work commencement. PPE requirements include hard hats, safety glasses, steel-toed boots, and high-visibility vests.",
+          "compliance_codes": ["OSHA 1926.95", "OSHA 1926.850"]
+        },
+        {
+          "page": 18,
+          "section": "Medical Equipment Service Safety",
+          "content": "When servicing medical equipment, technicians must follow FDA guidelines for device maintenance. All work must be performed by certified biomedical equipment technicians (BMET) with current training certificates.",
+          "certification_required": "BMET Level 2 or higher"
+        }
+      ]
+    },
+    {
+      "id": "file_004",
+      "name": "Medical_Equipment_Database.xlsx",
+      "type": "Excel",
+      "size": "8.9 MB",
+      "uploaded_date": "2025-01-05",
+      "status": "Processed",
+      "rows_extracted": 3421,
+      "chunks_created": 892,
+      "description": "Comprehensive medical equipment service codes and procedures",
+      "processing_time": "12.7 seconds",
+      "sample_data": [
+        {
+          "row": 847,
+          "equipment_type": "MRI Scanner",
+          "manufacturer": "Siemens",
+          "model": "Magnetom Vida",
+          "service_code": "MRI-SIE-VIDA",
+          "common_errors": "E-2847: Gradient coil temperature",
+          "response_time": "2 hours critical, 4 hours standard",
+          "parts_availability": "24/7 emergency stock"
+        },
+        {
+          "row": 1203,
+          "equipment_type": "CT Scanner", 
+          "manufacturer": "GE Healthcare",
+          "model": "Revolution CT",
+          "service_code": "CT-GE-REV",
+          "preventive_schedule": "Monthly calibration, quarterly deep clean",
+          "technician_level": "Level 3 certified"
+        }
+      ]
+    },
+    {
+      "id": "file_005",
+      "name": "Legal_Services_Rate_Card.pdf",
+      "type": "PDF",
+      "size": "945 KB",
+      "uploaded_date": "2025-01-08",
+      "status": "Processed",
+      "pages_extracted": 15,
+      "chunks_created": 34,
+      "description": "Attorney billing rates and service categories for legal work",
+      "processing_time": "1.8 seconds",
+      "sample_sections": [
+        {
+          "page": 7,
+          "section": "Contract Review Services",
+          "content": "Complex contract analysis: $850/hour (Senior Partner), $625/hour (Associate). Multi-party agreements require 40-60 hours typically. International compliance adds 25% premium.",
+          "service_codes": ["LEG-CON-REV", "LEG-INT-COMP"]
+        },
+        {
+          "page": 11,
+          "section": "Regulatory Compliance",
+          "content": "FDA regulatory work: $750/hour. IP and patent review: $700/hour. International trade law: $800/hour. Minimum engagement 10 hours.",
+          "expertise_areas": ["FDA", "Patent Law", "International Trade"]
+        }
+      ]
+    },
+    {
+      "id": "file_006",
+      "name": "Pharmaceutical_Formulary_2025.xlsx",
+      "type": "Excel",
+      "size": "15.2 MB",
+      "uploaded_date": "2025-01-10",
+      "status": "Processed",
+      "rows_extracted": 5847,
+      "chunks_created": 1203,
+      "description": "Hospital pharmaceutical formulary with 340B pricing and contracts",
+      "processing_time": "18.4 seconds",
+      "sample_data": [
+        {
+          "row": 2156,
+          "drug_name": "Pembrolizumab (Keytruda)",
+          "ndc": "00006-3026-02",
+          "category": "Oncology",
+          "340b_price": "$4,567.89",
+          "wac_price": "$6,847.23",
+          "storage": "2-8°C refrigerated",
+          "handling": "Specialty oncology protocols required"
+        },
+        {
+          "row": 3892,
+          "drug_name": "Epinephrine Auto-injector",
+          "ndc": "49502-0102-02", 
+          "category": "Emergency",
+          "340b_price": "$89.45",
+          "wac_price": "$312.50",
+          "storage": "Room temperature",
+          "par_level": "Code cart: 2 units minimum"
+        }
+      ]
+    }
+  ],
+  "retrieval_examples": [
+    {
+      "query": "debris pickup pricing",
+      "matched_document": "Service_Catalog_2025.xlsx",
+      "matched_row": 88,
+      "confidence": 0.94,
+      "content": "DPK-05: Five 20-yard dumpsters with pickup service - $2,850 base price, 24-48 hour response time"
+    },
+    {
+      "query": "1.5 inch stainless pipe schedule 40",
+      "matched_document": "Penn_2025_Product_Catalog.xlsx", 
+      "matched_row": 172,
+      "confidence": 0.97,
+      "content": "PIP-304-1.5OD-SCH40: 304 SS Pipe 1.5\" OD Schedule 40 - $28.50/ft, In Stock, 2-3 day lead time"
+    },
+    {
+      "query": "MRI error code E-2847",
+      "matched_document": "Medical_Equipment_Database.xlsx",
+      "matched_row": 847,
+      "confidence": 0.96,
+      "content": "Siemens Magnetom Vida MRI-SIE-VIDA: E-2847 indicates gradient coil temperature warning, 2-hour critical response time"
+    },
+    {
+      "query": "contract review legal services",
+      "matched_document": "Legal_Services_Rate_Card.pdf",
+      "matched_row": 7,
+      "confidence": 0.91,
+      "content": "Complex contract analysis: $850/hour Senior Partner, 40-60 hours typical for multi-party agreements"
+    },
+    {
+      "query": "HVAC installation commercial",
+      "matched_document": "Service_Catalog_2025.xlsx",
+      "matched_row": 201,
+      "confidence": 0.89,
+      "content": "HVAC-INST: Commercial HVAC Installation $85,000-$150,000, license required, 5-year warranty"
+    },
+    {
+      "query": "pharmaceutical 340B pricing oncology",
+      "matched_document": "Pharmaceutical_Formulary_2025.xlsx",
+      "matched_row": 2156,
+      "confidence": 0.93,
+      "content": "Pembrolizumab (Keytruda) Oncology: 340B price $4,567.89, requires refrigerated storage and specialty protocols"
+    }
+  ],
+  "processing_stats": {
+    "total_documents": 6,
+    "total_chunks": 2691,
+    "total_embeddings": 2691,
+    "vector_dimensions": 1536,
+    "avg_processing_time": "7.8 seconds",
+    "storage_used": "34.5 MB",
+    "last_updated": "2025-01-15T15:30:00Z"
+  }
+}
